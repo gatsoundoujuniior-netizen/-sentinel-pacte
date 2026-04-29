@@ -13,14 +13,16 @@
 
 ## Vue d'ensemble
 
-**SENTINEL** est un système IoT temps-réel de détection précoce d'anomalies environnementales dans des zones logistiques portuaires. Il analyse en continu les données de 9 capteurs (CO, LPG, fumée, température, humidité, lumière, mouvement) répartis sur 3 entrepôts via un algorithme d'apprentissage non-supervisé **Isolation Forest**, conforme à la norme de sécurité industrielle **IEC 61511 SIL 1**.
+**SENTINEL** est un système de détection précoce d'anomalies environnementales dans des zones logistiques portuaires, développé dans un cadre académique avec des **capteurs et scénarios simulés**. Il analyse les données de 9 capteurs (CO, LPG, fumée, température, humidité, lumière, mouvement) répartis sur 3 entrepôts via un algorithme d'apprentissage non-supervisé **Isolation Forest**, conforme à la norme de sécurité industrielle **IEC 61511 SIL 1**.
+
+> **Note :** Les capteurs ESP32 fonctionnent en mode simulation. Les 6 scénarios d'anomalies (fuite LPG, incendie, intrusion…) sont injectés synthétiquement dans le dataset réel pour valider les performances du modèle. Les données sont rejouées depuis un dataset Kaggle IoT Telemetry (405 171 mesures) vers InfluxDB Cloud.
 
 ### Architecture
 
 ```
-ESP32 (capteurs) ──MQTT──► Raspberry Pi ──► Isolation Forest ──► InfluxDB Cloud
-                                                                        │
-                                                              Flask Dashboard ◄─ Navigateur
+ESP32 (simulation) ──MQTT──► Raspberry Pi ──► Isolation Forest ──► InfluxDB Cloud
+                                                                           │
+                                                               Flask Dashboard ◄─ Navigateur
 ```
 
 ---
@@ -29,11 +31,11 @@ ESP32 (capteurs) ──MQTT──► Raspberry Pi ──► Isolation Forest ─
 
 | Fonctionnalité | Description |
 |---|---|
-| Détection temps-réel | Score d'anomalie toutes les N secondes par entrepôt |
+| Détection d'anomalies | Score d'anomalie Isolation Forest par entrepôt |
 | 3 niveaux de risque | NORMAL / SUSPECT / CRITIQUE avec seuils P5 et P10 |
-| 6 scénarios portuaires | Fuite LPG, Incendie, Intrusion, Surchauffe, Fuite chimique, Panne capteur |
+| 6 scénarios simulés | Fuite LPG, Incendie, Intrusion, Surchauffe, Fuite chimique, Panne capteur |
 | Dashboard Flask | Tableaux de bord, alertes, simulations, visualisations SVG |
-| Conformité SIL 1 | Recall moyen 96.8% — norme IEC 61511 respectée sur tous les scénarios |
+| Conformité SIL 1 | Recall moyen 96.8% sur scénarios injectés — norme IEC 61511 respectée |
 | RBAC | 3 rôles : Admin / Opérateur / Public |
 
 ---
@@ -174,10 +176,12 @@ sentinel-pacte/
 
 ## Dataset
 
-- **Source :** IoT Telemetry — 3 devices (entrepôts A, B, C)
+- **Source :** [IoT Telemetry Dataset — Kaggle](https://www.kaggle.com/datasets/garystafford/environmental-sensor-telemetry-data) · 3 devices (entrepôts A, B, C)
 - **Volume :** 405 171 lignes · 9 capteurs
-- **Distribution :** NORMAL 73.3% · CRITIQUE 19.6% · SUSPECT 7.1%
+- **Distribution après injection des scénarios :** NORMAL 73.3% · CRITIQUE 19.6% · SUSPECT 7.1%
+- **Anomalies :** 6 scénarios synthétiques injectés (`notebooks/pacte.ipynb` — cellule `89b8994f`)
 - **Paramètres ML :** `n_estimators=100`, `contamination=0.1`
+- **Replay InfluxDB :** 9 953 points sensor_events · 57 213 alertes critiques (avril 2026)
 
 ---
 
