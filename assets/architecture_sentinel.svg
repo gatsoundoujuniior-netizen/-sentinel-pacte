@@ -1,0 +1,399 @@
+<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a"/>
+      <stop offset="100%" style="stop-color:#111128"/>
+    </linearGradient>
+    <linearGradient id="iotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a3a5c"/>
+      <stop offset="100%" style="stop-color:#0d2240"/>
+    </linearGradient>
+    <linearGradient id="mqttGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3a1a5c"/>
+      <stop offset="100%" style="stop-color:#220d40"/>
+    </linearGradient>
+    <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5c3a0a"/>
+      <stop offset="100%" style="stop-color:#402210"/>
+    </linearGradient>
+    <linearGradient id="influxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a3a5c"/>
+      <stop offset="100%" style="stop-color:#0d2a40"/>
+    </linearGradient>
+    <linearGradient id="dashGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0a5c"/>
+      <stop offset="100%" style="stop-color:#0d0a40"/>
+    </linearGradient>
+    <!-- Glow filters -->
+    <filter id="glow1"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="glow2"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadow"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.5)"/></filter>
+    <!-- Arrow marker -->
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L10,3 z" fill="rgba(157,162,255,0.7)"/>
+    </marker>
+    <marker id="arrBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L10,3 z" fill="#4fc3f7"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="620" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(76,82,212,0.06)" stroke-width="1"/>
+  </pattern>
+  <rect width="1000" height="620" fill="url(#grid)"/>
+
+  <!-- Title -->
+  <text x="500" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="white" letter-spacing="3">SENTINEL — Architecture en 5 Couches</text>
+  <text x="500" y="58" text-anchor="middle" font-size="12" fill="#5a5f9e">Projet PACTE · Système de Surveillance Portuaire IoT</text>
+  <line x1="200" y1="68" x2="800" y2="68" stroke="rgba(76,82,212,0.3)" stroke-width="1"/>
+
+  <!-- ─────────────── LAYER 1 : IoT SENSORS ─────────────── -->
+  <!-- Hexagon shape for IoT layer -->
+  <g filter="url(#shadow)">
+    <path d="M 80 130 L 240 130 Q 260 130 260 150 L 260 260 Q 260 280 240 280 L 80 280 Q 60 280 60 260 L 60 150 Q 60 130 80 130 Z" fill="url(#iotGrad)" stroke="#2196f3" stroke-width="1.5" opacity="0.95"/>
+  </g>
+
+  <!-- ESP32 chip icon -->
+  <rect x="115" y="148" width="90" height="60" rx="4" fill="#1565c0" stroke="#42a5f5" stroke-width="1"/>
+  <!-- Chip pins left -->
+  <rect x="105" y="155" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <rect x="105" y="163" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <rect x="105" y="171" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <rect x="105" y="179" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <rect x="105" y="187" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <!-- Chip pins right -->
+  <rect x="205" y="155" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <rect x="205" y="163" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <rect x="205" y="171" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <rect x="205" y="179" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <rect x="205" y="187" width="10" height="4" rx="1" fill="#42a5f5"/>
+  <!-- Chip text -->
+  <text x="160" y="172" text-anchor="middle" font-size="9" font-weight="700" fill="#4fc3f7" letter-spacing="1">ESP32</text>
+  <text x="160" y="184" text-anchor="middle" font-size="7" fill="#1976d2">WiFi · BLE</text>
+  <!-- Antenna -->
+  <line x1="195" y1="148" x2="195" y2="140" stroke="#42a5f5" stroke-width="1.5"/>
+  <path d="M 188 140 Q 195 133 202 140" fill="none" stroke="#42a5f5" stroke-width="1.5"/>
+
+  <!-- Sensor icons -->
+  <!-- CO sensor -->
+  <circle cx="95" cy="232" r="16" fill="#0d47a1" stroke="#42a5f5" stroke-width="1"/>
+  <text x="95" y="229" text-anchor="middle" font-size="7" fill="#4fc3f7" font-weight="700">CO</text>
+  <text x="95" y="239" text-anchor="middle" font-size="6" fill="#1976d2">ppm</text>
+  <!-- Temp sensor -->
+  <circle cx="130" cy="232" r="16" fill="#0d47a1" stroke="#ef9f27" stroke-width="1"/>
+  <text x="130" y="229" text-anchor="middle" font-size="7" fill="#ef9f27" font-weight="700">°C</text>
+  <text x="130" y="239" text-anchor="middle" font-size="6" fill="#8d6e00">temp</text>
+  <!-- LPG sensor -->
+  <circle cx="165" cy="232" r="16" fill="#0d47a1" stroke="#ef5350" stroke-width="1"/>
+  <text x="165" y="229" text-anchor="middle" font-size="7" fill="#ef9090" font-weight="700">LPG</text>
+  <text x="165" y="239" text-anchor="middle" font-size="6" fill="#8d2020">gas</text>
+  <!-- Humidity sensor -->
+  <circle cx="200" cy="232" r="16" fill="#0d47a1" stroke="#26c6da" stroke-width="1"/>
+  <text x="200" y="229" text-anchor="middle" font-size="7" fill="#4dd0e1" font-weight="700">RH</text>
+  <text x="200" y="239" text-anchor="middle" font-size="6" fill="#006064">hum</text>
+  <!-- Smoke sensor -->
+  <circle cx="235" cy="232" r="16" fill="#0d47a1" stroke="#ab47bc" stroke-width="1"/>
+  <text x="235" y="229" text-anchor="middle" font-size="6" fill="#ce93d8" font-weight="700">SMOKE</text>
+  <text x="235" y="239" text-anchor="middle" font-size="6" fill="#6a1b6a">tvoc</text>
+
+  <!-- Layer label -->
+  <text x="160" y="270" text-anchor="middle" font-size="11" font-weight="700" fill="#42a5f5">COUCHE 1</text>
+  <text x="160" y="283" text-anchor="middle" font-size="9" fill="#5a5f9e">Capteurs IoT · 3 entrepôts A/B/C</text>
+
+  <!-- ─────────────── ARROW 1→2 ─────────────── -->
+  <g filter="url(#glow1)">
+    <line x1="262" y1="205" x2="340" y2="205" stroke="#4fc3f7" stroke-width="2.5" marker-end="url(#arrBlue)" stroke-dasharray="6,3"/>
+  </g>
+  <text x="301" y="198" text-anchor="middle" font-size="9" fill="#4fc3f7">TCP/IP</text>
+  <text x="301" y="218" text-anchor="middle" font-size="8" fill="#2a5a7a">WiFi</text>
+
+  <!-- ─────────────── LAYER 2 : MQTT ─────────────── -->
+  <g filter="url(#shadow)">
+    <path d="M 340 130 L 500 130 Q 520 130 520 150 L 520 280 Q 520 300 500 300 L 340 300 Q 320 300 320 280 L 320 150 Q 320 130 340 130 Z" fill="url(#mqttGrad)" stroke="#9c27b0" stroke-width="1.5" opacity="0.95"/>
+  </g>
+
+  <!-- Raspberry Pi icon -->
+  <!-- Pi board -->
+  <rect x="355" y="148" width="90" height="65" rx="5" fill="#2e003e" stroke="#9c27b0" stroke-width="1.5"/>
+  <!-- GPIO pins top -->
+  <rect x="358" y="143" width="84" height="6" rx="1" fill="#4a148c"/>
+  <!-- Raspberry Pi logo (stylized) -->
+  <circle cx="400" cy="162" r="12" fill="#9c27b0" opacity="0.3"/>
+  <!-- Pi symbol -->
+  <text x="400" y="167" text-anchor="middle" font-size="14" fill="#ce93d8" font-weight="700">π</text>
+  <text x="400" y="180" text-anchor="middle" font-size="7" fill="#9c27b0" letter-spacing="1">Raspberry Pi</text>
+  <text x="400" y="192" text-anchor="middle" font-size="6" fill="#6a1b6a">Debian · Python 3.11</text>
+  <!-- USB ports -->
+  <rect x="355" y="198" width="14" height="8" rx="1" fill="#4a148c" stroke="#7b1fa2" stroke-width="0.5"/>
+  <rect x="373" y="198" width="14" height="8" rx="1" fill="#4a148c" stroke="#7b1fa2" stroke-width="0.5"/>
+  <!-- Ethernet -->
+  <rect x="430" y="195" width="16" height="12" rx="1" fill="#1a237e" stroke="#7b1fa2" stroke-width="0.5"/>
+
+  <!-- MQTT Broker label -->
+  <rect x="348" y="222" width="104" height="30" rx="5" fill="rgba(156,39,176,0.15)" stroke="rgba(156,39,176,0.4)" stroke-width="1"/>
+  <text x="400" y="234" text-anchor="middle" font-size="9" fill="#ce93d8" font-weight="700">MQTT Broker</text>
+  <text x="400" y="246" text-anchor="middle" font-size="7.5" fill="#7b1fa2">Mosquitto · Port 1883</text>
+
+  <!-- Topics -->
+  <text x="400" y="265" text-anchor="middle" font-size="8" fill="#6a1b6a">Topic: pacte/capteurs/#</text>
+
+  <!-- Layer label -->
+  <text x="420" y="285" text-anchor="middle" font-size="11" font-weight="700" fill="#ce93d8">COUCHE 2</text>
+  <text x="420" y="298" text-anchor="middle" font-size="9" fill="#5a5f9e">Collecte · MQTT · Raspberry Pi</text>
+
+  <!-- ─────────────── ARROW 2→3 ─────────────── -->
+  <g filter="url(#glow1)">
+    <line x1="522" y1="215" x2="598" y2="215" stroke="#ef9f27" stroke-width="2.5" marker-end="url(#arr)" stroke-dasharray="6,3"/>
+  </g>
+  <text x="560" y="208" text-anchor="middle" font-size="9" fill="#ef9f27">DataFrame</text>
+  <text x="560" y="228" text-anchor="middle" font-size="8" fill="#7a5000">405k rows</text>
+
+  <!-- ─────────────── LAYER 3 : ML / AI ─────────────── -->
+  <g filter="url(#shadow)">
+    <path d="M 600 110 L 760 110 Q 780 110 780 130 L 780 290 Q 780 310 760 310 L 600 310 Q 580 310 580 290 L 580 130 Q 580 110 600 110 Z" fill="url(#aiGrad)" stroke="#ff9800" stroke-width="1.5" opacity="0.95"/>
+  </g>
+
+  <!-- Python logo (simplified) -->
+  <circle cx="640" cy="148" r="18" fill="#1a3a00" stroke="#8bc34a" stroke-width="1"/>
+  <!-- Python snake -->
+  <text x="640" y="153" text-anchor="middle" font-size="16" fill="#8bc34a">🐍</text>
+
+  <!-- scikit-learn logo area -->
+  <rect x="665" y="133" width="55" height="30" rx="4" fill="#1a2a00" stroke="#8bc34a" stroke-width="0.8"/>
+  <text x="692" y="146" text-anchor="middle" font-size="7" fill="#aed581" font-weight="700">scikit-learn</text>
+  <text x="692" y="157" text-anchor="middle" font-size="6" fill="#558b2f">v1.4+</text>
+
+  <!-- Forest tree icons -->
+  <!-- Tree 1 -->
+  <polygon points="665,205 680,180 695,205" fill="rgba(99,153,34,0.3)" stroke="#639922" stroke-width="1"/>
+  <rect x="678" y="205" width="4" height="8" fill="#4e342e"/>
+  <!-- Tree 2 -->
+  <polygon points="685,210 700,185 715,210" fill="rgba(99,153,34,0.4)" stroke="#639922" stroke-width="1"/>
+  <rect x="698" y="210" width="4" height="8" fill="#4e342e"/>
+  <!-- Tree 3 -->
+  <polygon points="705,205 720,178 735,205" fill="rgba(99,153,34,0.5)" stroke="#639922" stroke-width="1"/>
+  <rect x="718" y="205" width="4" height="8" fill="#4e342e"/>
+
+  <!-- Isolation Forest label -->
+  <rect x="600" y="220" width="160" height="42" rx="6" fill="rgba(255,152,0,0.1)" stroke="rgba(255,152,0,0.3)" stroke-width="1"/>
+  <text x="680" y="234" text-anchor="middle" font-size="9" fill="#ffcc80" font-weight="700">Isolation Forest</text>
+  <text x="680" y="246" text-anchor="middle" font-size="7.5" fill="#bf8e3a">n_estimators=100 · contam=0.1</text>
+  <text x="680" y="257" text-anchor="middle" font-size="7.5" fill="#bf8e3a">Features: CO · LPG · temp · hum · smoke</text>
+
+  <!-- Score output -->
+  <rect x="615" y="268" width="48" height="22" rx="4" fill="rgba(226,75,74,0.2)" stroke="#e24b4a" stroke-width="1"/>
+  <text x="639" y="277" text-anchor="middle" font-size="7" fill="#ef9090" font-weight="700">CRITIQUE</text>
+  <text x="639" y="286" text-anchor="middle" font-size="6" fill="#8d2020">&lt; -0.099</text>
+  <rect x="669" y="268" width="48" height="22" rx="4" fill="rgba(239,159,39,0.2)" stroke="#ef9f27" stroke-width="1"/>
+  <text x="693" y="277" text-anchor="middle" font-size="7" fill="#ef9f27" font-weight="700">SUSPECT</text>
+  <text x="693" y="286" text-anchor="middle" font-size="6" fill="#8d5a00">-0.099..-0.027</text>
+  <rect x="723" y="268" width="46" height="22" rx="4" fill="rgba(99,153,34,0.2)" stroke="#639922" stroke-width="1"/>
+  <text x="746" y="277" text-anchor="middle" font-size="7" fill="#a0d060" font-weight="700">NORMAL</text>
+  <text x="746" y="286" text-anchor="middle" font-size="6" fill="#3a6010">&gt; -0.027</text>
+
+  <!-- Layer label -->
+  <text x="680" y="300" text-anchor="middle" font-size="11" font-weight="700" fill="#ffb74d">COUCHE 3</text>
+  <text x="680" y="313" text-anchor="middle" font-size="9" fill="#5a5f9e">IA · Anomaly Detection · Python</text>
+
+  <!-- ─────────────── ARROW 3→4 ─────────────── -->
+  <g filter="url(#glow1)">
+    <line x1="782" y1="215" x2="855" y2="215" stroke="#9da2ff" stroke-width="2.5" marker-end="url(#arr)" stroke-dasharray="6,3"/>
+  </g>
+  <text x="818" y="208" text-anchor="middle" font-size="9" fill="#9da2ff">Line Protocol</text>
+  <text x="818" y="228" text-anchor="middle" font-size="8" fill="#3a3d6b">HTTPS</text>
+
+  <!-- ─────────────── LAYER 4 : InfluxDB ─────────────── -->
+  <g filter="url(#shadow)">
+    <path d="M 858 120 L 980 120 Q 995 120 995 135 L 995 295 Q 995 310 980 310 L 858 310 Q 843 310 843 295 L 843 135 Q 843 120 858 120 Z" fill="url(#influxGrad)" stroke="#22d4f5" stroke-width="1.5" opacity="0.95"/>
+  </g>
+
+  <!-- InfluxDB logo (stylized) -->
+  <!-- Hexagon shape like InfluxDB logo -->
+  <polygon points="919,142 940,153 940,177 919,188 898,177 898,153" fill="#0e2a3a" stroke="#22d4f5" stroke-width="1.5"/>
+  <!-- Inner diamond -->
+  <polygon points="919,150 932,161 919,172 906,161" fill="rgba(34,212,245,0.2)" stroke="#22d4f5" stroke-width="1"/>
+  <text x="919" y="165" text-anchor="middle" font-size="8" fill="#22d4f5" font-weight="700">Influx</text>
+  <text x="919" y="176" text-anchor="middle" font-size="6" fill="#0097a7">DB</text>
+
+  <!-- Cloud badge -->
+  <rect x="865" y="197" width="110" height="16" rx="4" fill="rgba(34,212,245,0.1)" stroke="rgba(34,212,245,0.3)" stroke-width="0.8"/>
+  <text x="920" y="208" text-anchor="middle" font-size="8" fill="#4dd0e1" font-weight="700">InfluxDB Cloud ☁️</text>
+
+  <!-- Measurements -->
+  <rect x="855" y="218" width="130" height="18" rx="3" fill="#0a2a2a" stroke="#006064" stroke-width="0.8"/>
+  <text x="920" y="230" text-anchor="middle" font-size="7.5" fill="#80cbc4">📊 sensor_events · 9 953 pts</text>
+  <rect x="855" y="240" width="130" height="18" rx="3" fill="#1a0a0a" stroke="#b71c1c" stroke-width="0.8"/>
+  <text x="920" y="252" text-anchor="middle" font-size="7.5" fill="#ef9090">🚨 critical_alerts · 57 213 pts</text>
+  <rect x="855" y="262" width="130" height="18" rx="3" fill="#1a1a0a" stroke="#f57f17" stroke-width="0.8"/>
+  <text x="920" y="274" text-anchor="middle" font-size="7.5" fill="#ffe082">🧪 simulations · historique</text>
+
+  <!-- Bucket label -->
+  <text x="920" y="292" text-anchor="middle" font-size="8" fill="#006064">Bucket: <tspan font-weight="700" fill="#22d4f5">pacte</tspan></text>
+
+  <!-- Layer label -->
+  <text x="920" y="301" text-anchor="middle" font-size="11" font-weight="700" fill="#22d4f5">COUCHE 4</text>
+  <text x="920" y="314" text-anchor="middle" font-size="9" fill="#5a5f9e">Stockage Time-Series Cloud</text>
+
+  <!-- ─────────────── ARROW 4→5 (going down) ─────────────── -->
+  <g filter="url(#glow1)">
+    <path d="M 919 312 L 919 350 L 600 350 L 600 375" stroke="#9da2ff" stroke-width="2" fill="none" stroke-dasharray="6,3" marker-end="url(#arr)"/>
+  </g>
+  <text x="760" y="345" text-anchor="middle" font-size="9" fill="#9da2ff">Flask API · JSON</text>
+
+  <!-- Flask arrow from left side -->
+  <g filter="url(#glow1)">
+    <path d="M 160 282 L 160 350 L 420 350 L 420 375" stroke="rgba(99,153,34,0.6)" stroke-width="1.5" fill="none" stroke-dasharray="4,4" marker-end="url(#arr)"/>
+  </g>
+  <text x="290" y="362" text-anchor="middle" font-size="8" fill="#639922">app.py · /api/*</text>
+
+  <!-- ─────────────── LAYER 5 : DASHBOARD ─────────────── -->
+  <g filter="url(#shadow)">
+    <rect x="120" y="375" width="770" height="215" rx="16" fill="url(#dashGrad)" stroke="#7c4dff" stroke-width="1.5" opacity="0.95"/>
+  </g>
+
+  <!-- Browser window mockup -->
+  <!-- Browser chrome -->
+  <rect x="140" y="390" width="730" height="185" rx="10" fill="#080818" stroke="#3d3d80" stroke-width="1"/>
+  <!-- Browser top bar -->
+  <rect x="140" y="390" width="730" height="24" rx="10" fill="#13132a"/>
+  <rect x="140" y="402" width="730" height="12" fill="#13132a"/>
+  <!-- Traffic lights -->
+  <circle cx="158" cy="402" r="5" fill="#ff5f57"/>
+  <circle cx="173" cy="402" r="5" fill="#febc2e"/>
+  <circle cx="188" cy="402" r="5" fill="#28c840"/>
+  <!-- URL bar -->
+  <rect x="210" y="396" width="440" height="12" rx="6" fill="#1a1a3a" stroke="#3d3d80" stroke-width="0.5"/>
+  <text x="430" y="405" text-anchor="middle" font-size="7" fill="#5a5f9e">http://localhost:5000</text>
+
+  <!-- SENTINEL mini UI inside browser -->
+  <!-- Left nav -->
+  <rect x="140" y="414" width="100" height="161" rx="0" fill="#0d0d1c" stroke="none"/>
+  <text x="190" y="430" text-anchor="middle" font-size="8" fill="#4c52d4" font-weight="700">SENTINEL</text>
+  <rect x="148" y="435" width="84" height="14" rx="3" fill="rgba(76,82,212,0.3)" stroke="rgba(76,82,212,0.4)" stroke-width="0.5"/>
+  <text x="190" y="445" text-anchor="middle" font-size="7" fill="#9da2ff">Dashboard</text>
+  <rect x="148" y="452" width="84" height="14" rx="3" fill="transparent"/>
+  <text x="190" y="462" text-anchor="middle" font-size="7" fill="#3a3d6b">Carte</text>
+  <rect x="148" y="469" width="84" height="14" rx="3" fill="transparent"/>
+  <text x="190" y="479" text-anchor="middle" font-size="7" fill="#3a3d6b">Simulation</text>
+  <rect x="148" y="486" width="84" height="14" rx="3" fill="transparent"/>
+  <text x="190" y="496" text-anchor="middle" font-size="7" fill="#3a3d6b">Alertes</text>
+  <rect x="148" y="503" width="84" height="14" rx="3" fill="transparent"/>
+  <text x="190" y="513" text-anchor="middle" font-size="7" fill="#3a3d6b">Logs</text>
+
+  <!-- KPI cards mini -->
+  <rect x="248" y="418" width="90" height="40" rx="5" fill="#13132a" stroke="rgba(76,82,212,0.3)" stroke-width="0.8"/>
+  <text x="293" y="432" text-anchor="middle" font-size="7" fill="#5a5f9e">Total analysés</text>
+  <text x="293" y="447" text-anchor="middle" font-size="13" font-weight="700" fill="white">9 953</text>
+
+  <rect x="346" y="418" width="90" height="40" rx="5" fill="#13132a" stroke="rgba(226,75,74,0.3)" stroke-width="0.8"/>
+  <text x="391" y="432" text-anchor="middle" font-size="7" fill="#5a5f9e">Critiques</text>
+  <text x="391" y="447" text-anchor="middle" font-size="13" font-weight="700" fill="#e24b4a">2 846</text>
+
+  <rect x="444" y="418" width="90" height="40" rx="5" fill="#13132a" stroke="rgba(239,159,39,0.3)" stroke-width="0.8"/>
+  <text x="489" y="432" text-anchor="middle" font-size="7" fill="#5a5f9e">Suspects</text>
+  <text x="489" y="447" text-anchor="middle" font-size="13" font-weight="700" fill="#ef9f27">694</text>
+
+  <rect x="542" y="418" width="90" height="40" rx="5" fill="#13132a" stroke="rgba(99,153,34,0.3)" stroke-width="0.8"/>
+  <text x="587" y="432" text-anchor="middle" font-size="7" fill="#5a5f9e">Normaux</text>
+  <text x="587" y="447" text-anchor="middle" font-size="13" font-weight="700" fill="#639922">6 413</text>
+
+  <!-- Mini bar chart -->
+  <rect x="248" y="465" width="210" height="105" rx="5" fill="#13132a" stroke="rgba(76,82,212,0.2)" stroke-width="0.8"/>
+  <text x="353" y="478" text-anchor="middle" font-size="7" fill="#5a5f9e">Alertes par scénario</text>
+  <!-- Bars -->
+  <rect x="262" y="545" width="22" height="28" rx="2" fill="#e24b4a" opacity="0.8"/>
+  <rect x="290" y="525" width="22" height="48" rx="2" fill="#7b80ff" opacity="0.8"/>
+  <rect x="318" y="534" width="22" height="39" rx="2" fill="#ef9f27" opacity="0.8"/>
+  <rect x="346" y="541" width="22" height="32" rx="2" fill="#888780" opacity="0.8"/>
+  <rect x="374" y="548" width="22" height="25" rx="2" fill="#f0997b" opacity="0.8"/>
+  <rect x="402" y="553" width="22" height="20" rx="2" fill="#9da2ff" opacity="0.8"/>
+  <line x1="255" y1="573" x2="435" y2="573" stroke="rgba(76,82,212,0.2)" stroke-width="0.5"/>
+  <text x="273" y="560" text-anchor="middle" font-size="6" fill="#3a3d6b" transform="rotate(-30,273,560)">incend.</text>
+  <text x="301" y="560" text-anchor="middle" font-size="6" fill="#3a3d6b" transform="rotate(-30,301,560)">chim.</text>
+  <text x="329" y="560" text-anchor="middle" font-size="6" fill="#3a3d6b" transform="rotate(-30,329,560)">surch.</text>
+  <text x="357" y="560" text-anchor="middle" font-size="6" fill="#3a3d6b" transform="rotate(-30,357,560)">panne</text>
+  <text x="385" y="560" text-anchor="middle" font-size="6" fill="#3a3d6b" transform="rotate(-30,385,560)">LPG</text>
+  <text x="413" y="560" text-anchor="middle" font-size="6" fill="#3a3d6b" transform="rotate(-30,413,560)">intrus.</text>
+
+  <!-- Warehouse SVG mini -->
+  <rect x="466" y="465" width="175" height="105" rx="5" fill="#13132a" stroke="rgba(76,82,212,0.2)" stroke-width="0.8"/>
+  <text x="554" y="478" text-anchor="middle" font-size="7" fill="#5a5f9e">Carte entrepôts</text>
+  <!-- Warehouse A (normal) -->
+  <polygon points="486,530 486,510 506,503 526,510 526,530" fill="rgba(99,153,34,0.2)" stroke="#639922" stroke-width="1"/>
+  <rect x="489" y="520" width="8" height="10" fill="#639922" opacity="0.5"/>
+  <rect x="501" y="520" width="8" height="10" fill="#639922" opacity="0.5"/>
+  <text x="506" y="542" text-anchor="middle" font-size="7" fill="#639922">A</text>
+  <!-- Warehouse B (suspect) -->
+  <polygon points="534,530 534,508 554,501 574,508 574,530" fill="rgba(239,159,39,0.2)" stroke="#ef9f27" stroke-width="1"/>
+  <rect x="537" y="520" width="8" height="10" fill="#ef9f27" opacity="0.5"/>
+  <rect x="549" y="520" width="8" height="10" fill="#ef9f27" opacity="0.5"/>
+  <text x="554" y="542" text-anchor="middle" font-size="7" fill="#ef9f27">B</text>
+  <!-- Warehouse C (critique) -->
+  <polygon points="582,530 582,508 602,501 622,508 622,530" fill="rgba(226,75,74,0.3)" stroke="#e24b4a" stroke-width="1"/>
+  <rect x="585" y="520" width="8" height="10" fill="#e24b4a" opacity="0.5"/>
+  <rect x="597" y="520" width="8" height="10" fill="#e24b4a" opacity="0.5"/>
+  <!-- Fire effect for C -->
+  <text x="602" y="505" text-anchor="middle" font-size="10">🔥</text>
+  <text x="602" y="542" text-anchor="middle" font-size="7" fill="#e24b4a">C</text>
+  <!-- Legend -->
+  <circle cx="476" cy="558" r="3" fill="#639922"/>
+  <text x="483" y="561" font-size="6" fill="#5a5f9e">NORMAL</text>
+  <circle cx="520" cy="558" r="3" fill="#ef9f27"/>
+  <text x="527" y="561" font-size="6" fill="#5a5f9e">SUSPECT</text>
+  <circle cx="568" cy="558" r="3" fill="#e24b4a"/>
+  <text x="575" y="561" font-size="6" fill="#5a5f9e">CRITIQUE</text>
+
+  <!-- Tech stack logos mini -->
+  <rect x="648" y="418" width="205" height="150" rx="5" fill="#13132a" stroke="rgba(76,82,212,0.2)" stroke-width="0.8"/>
+  <text x="751" y="432" text-anchor="middle" font-size="7.5" fill="#5a5f9e" font-weight="600">STACK TECHNIQUE</text>
+  <!-- Flask -->
+  <rect x="660" y="440" width="85" height="28" rx="4" fill="#1a2a1a" stroke="#4caf50" stroke-width="0.8"/>
+  <text x="703" y="451" text-anchor="middle" font-size="8" fill="#8bc34a" font-weight="700">Flask 3.0</text>
+  <text x="703" y="462" text-anchor="middle" font-size="6.5" fill="#2e7d32">Backend Python</text>
+  <!-- Chart.js -->
+  <rect x="752" y="440" width="85" height="28" rx="4" fill="#2a1a0a" stroke="#ff9800" stroke-width="0.8"/>
+  <text x="795" y="451" text-anchor="middle" font-size="8" fill="#ff9800" font-weight="700">Chart.js</text>
+  <text x="795" y="462" text-anchor="middle" font-size="6.5" fill="#e65100">Graphes JS</text>
+  <!-- HTML/CSS -->
+  <rect x="660" y="474" width="85" height="28" rx="4" fill="#1a0a2a" stroke="#9c27b0" stroke-width="0.8"/>
+  <text x="703" y="485" text-anchor="middle" font-size="8" fill="#ce93d8" font-weight="700">HTML · CSS</text>
+  <text x="703" y="496" text-anchor="middle" font-size="6.5" fill="#6a1b6a">Interface SPA</text>
+  <!-- RBAC -->
+  <rect x="752" y="474" width="85" height="28" rx="4" fill="#0a1a2a" stroke="#2196f3" stroke-width="0.8"/>
+  <text x="795" y="485" text-anchor="middle" font-size="8" fill="#64b5f6" font-weight="700">RBAC</text>
+  <text x="795" y="496" text-anchor="middle" font-size="6.5" fill="#0d47a1">Admin·Op·Citoyen</text>
+  <!-- uv -->
+  <rect x="660" y="508" width="85" height="28" rx="4" fill="#1a2a1a" stroke="#66bb6a" stroke-width="0.8"/>
+  <text x="703" y="519" text-anchor="middle" font-size="8" fill="#a5d6a7" font-weight="700">uv</text>
+  <text x="703" y="530" text-anchor="middle" font-size="6.5" fill="#2e7d32">Package manager</text>
+  <!-- dotenv -->
+  <rect x="752" y="508" width="85" height="28" rx="4" fill="#2a2a1a" stroke="#cddc39" stroke-width="0.8"/>
+  <text x="795" y="519" text-anchor="middle" font-size="8" fill="#dce775" font-weight="700">.env</text>
+  <text x="795" y="530" text-anchor="middle" font-size="6.5" fill="#827717">Config sécurisée</text>
+  <!-- Auto refresh note -->
+  <text x="751" y="551" text-anchor="middle" font-size="7" fill="#3a3d6b">Auto-refresh InfluxDB: 30s</text>
+  <text x="751" y="562" text-anchor="middle" font-size="7" fill="#3a3d6b">Simulation live · Multi-entrepôt</text>
+
+  <!-- Layer 5 label -->
+  <text x="500" y="596" text-anchor="middle" font-size="13" font-weight="700" fill="#9da2ff">COUCHE 5 — Interface SENTINEL · Flask + HTML/JS · Port 5000</text>
+
+  <!-- ─────────────── LEGEND TOP RIGHT ─────────────── -->
+  <rect x="635" y="73" width="200" height="50" rx="8" fill="rgba(13,13,28,0.8)" stroke="rgba(76,82,212,0.3)" stroke-width="0.8"/>
+  <line x1="648" y1="90" x2="678" y2="90" stroke="#4fc3f7" stroke-width="2" stroke-dasharray="5,2"/>
+  <text x="685" y="93" font-size="8" fill="#4fc3f7">Flux de données</text>
+  <line x1="648" y1="108" x2="678" y2="108" stroke="rgba(99,153,34,0.6)" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <text x="685" y="111" font-size="8" fill="#639922">Requêtes API Flask</text>
+
+  <!-- Glow dots at connection points -->
+  <circle cx="262" cy="205" r="5" fill="#4fc3f7" opacity="0.8" filter="url(#glow1)"/>
+  <circle cx="340" cy="205" r="5" fill="#4fc3f7" opacity="0.8" filter="url(#glow1)"/>
+  <circle cx="522" cy="215" r="5" fill="#ef9f27" opacity="0.8" filter="url(#glow1)"/>
+  <circle cx="598" cy="215" r="5" fill="#ef9f27" opacity="0.8" filter="url(#glow1)"/>
+  <circle cx="782" cy="215" r="5" fill="#9da2ff" opacity="0.8" filter="url(#glow1)"/>
+  <circle cx="856" cy="215" r="5" fill="#9da2ff" opacity="0.8" filter="url(#glow1)"/>
+</svg>

@@ -1,0 +1,270 @@
+<svg viewBox="0 0 960 900" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',Arial,sans-serif">
+
+  <rect width="960" height="900" fill="#f0f2f8"/>
+
+  <!-- TITRE -->
+  <rect width="960" height="64" fill="#1e2560"/>
+  <text x="480" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="white">Architecture Logicielle — SENTINEL</text>
+  <text x="480" y="50" text-anchor="middle" font-size="11" fill="#9da8e0">Projet PACTE · Junior Gatsoundou · HESTIM 2026</text>
+
+  <!-- ══════════════════════════════════
+       COUCHE 1 : FRONTEND
+       ══════════════════════════════════ -->
+  <rect x="16" y="80" width="928" height="232" rx="10" fill="#eef0fb" stroke="#3949ab" stroke-width="1.5"/>
+  <!-- Étiquette couche -->
+  <rect x="16" y="80" width="928" height="32" rx="10" fill="#3949ab"/>
+  <text x="36" y="101" font-size="12" font-weight="700" fill="white">COUCHE 1 — FRONTEND</text>
+  <text x="400" y="101" font-size="10" fill="#c5cae9">sentinel_full_rbac_port.html · HTML + CSS + JavaScript</text>
+
+  <!-- Carte RBAC -->
+  <rect x="32" y="124" width="140" height="172" rx="8" fill="white" stroke="#3949ab" stroke-width="1.5" filter="url(#sh)"/>
+  <rect x="32" y="124" width="140" height="30" rx="8" fill="#3949ab"/>
+  <text x="102" y="144" text-anchor="middle" font-size="10" font-weight="700" fill="white">🔐 RBAC</text>
+  <text x="102" y="170" text-anchor="middle" font-size="8.5" fill="#3949ab" font-weight="600">Rôles utilisateurs</text>
+  <line x1="42" y1="178" x2="162" y2="178" stroke="#e8eaf6" stroke-width="1"/>
+  <text x="102" y="194" text-anchor="middle" font-size="8" fill="#555">👑 Admin</text>
+  <text x="102" y="210" text-anchor="middle" font-size="8" fill="#555">🛡️ Opérateur</text>
+  <text x="102" y="226" text-anchor="middle" font-size="8" fill="#555">👤 Citoyen</text>
+  <rect x="42" y="236" width="120" height="18" rx="4" fill="#e8eaf6"/>
+  <text x="102" y="248" text-anchor="middle" font-size="7.5" fill="#3949ab">currentUser · currentRole</text>
+  <text x="102" y="280" text-anchor="middle" font-size="7" fill="#9fa8da">login / logout / session</text>
+
+  <!-- Carte Navigation -->
+  <rect x="188" y="124" width="140" height="172" rx="8" fill="white" stroke="#00897b" stroke-width="1.5"/>
+  <rect x="188" y="124" width="140" height="30" rx="8" fill="#00897b"/>
+  <text x="258" y="144" text-anchor="middle" font-size="10" font-weight="700" fill="white">🧭 Navigation</text>
+  <text x="258" y="170" text-anchor="middle" font-size="8.5" fill="#00695c" font-weight="600">5 pages SPA</text>
+  <line x1="198" y1="178" x2="318" y2="178" stroke="#e0f2f1" stroke-width="1"/>
+  <text x="258" y="194" text-anchor="middle" font-size="8" fill="#555">Dashboard</text>
+  <text x="258" y="210" text-anchor="middle" font-size="8" fill="#555">Carte entrepôts</text>
+  <text x="258" y="226" text-anchor="middle" font-size="8" fill="#555">Simulation</text>
+  <text x="258" y="242" text-anchor="middle" font-size="8" fill="#555">Alertes</text>
+  <text x="258" y="258" text-anchor="middle" font-size="8" fill="#555">Logs capteurs</text>
+  <rect x="198" y="268" width="120" height="18" rx="4" fill="#e0f2f1"/>
+  <text x="258" y="280" text-anchor="middle" font-size="7.5" fill="#00695c">showPage(name)</text>
+
+  <!-- Carte Simulation -->
+  <rect x="344" y="124" width="155" height="172" rx="8" fill="white" stroke="#f57c00" stroke-width="1.5"/>
+  <rect x="344" y="124" width="155" height="30" rx="8" fill="#f57c00"/>
+  <text x="421" y="144" text-anchor="middle" font-size="10" font-weight="700" fill="white">⚙️ Simulateur</text>
+  <text x="421" y="170" text-anchor="middle" font-size="8.5" fill="#e65100" font-weight="600">Multi-entrepôt simultané</text>
+  <line x1="354" y1="178" x2="489" y2="178" stroke="#fff3e0" stroke-width="1"/>
+  <text x="421" y="194" text-anchor="middle" font-size="8" fill="#555">simStates {A, B, C}</text>
+  <text x="421" y="210" text-anchor="middle" font-size="8" fill="#555">simStep(whId)</text>
+  <text x="421" y="226" text-anchor="middle" font-size="8" fill="#555">toggleSimWH(id)</text>
+  <text x="421" y="242" text-anchor="middle" font-size="8" fill="#555">stopSim()</text>
+  <rect x="354" y="252" width="135" height="18" rx="4" fill="#fff3e0"/>
+  <text x="421" y="264" text-anchor="middle" font-size="7.5" fill="#e65100">3 setInterval indépendants</text>
+  <text x="421" y="282" text-anchor="middle" font-size="7" fill="#ffb74d">POST /api/simulation/save</text>
+
+  <!-- Carte Graphes -->
+  <rect x="515" y="124" width="140" height="172" rx="8" fill="white" stroke="#0097a7" stroke-width="1.5"/>
+  <rect x="515" y="124" width="140" height="30" rx="8" fill="#0097a7"/>
+  <text x="585" y="144" text-anchor="middle" font-size="10" font-weight="700" fill="white">📊 Graphes</text>
+  <text x="585" y="170" text-anchor="middle" font-size="8.5" fill="#006064" font-weight="600">Chart.js 4.4.1</text>
+  <line x1="525" y1="178" x2="645" y2="178" stroke="#e0f7fa" stroke-width="1"/>
+  <text x="585" y="194" text-anchor="middle" font-size="8" fill="#555">Bar — alertes/scénario</text>
+  <text x="585" y="210" text-anchor="middle" font-size="8" fill="#555">Line — simulation live</text>
+  <text x="585" y="226" text-anchor="middle" font-size="8" fill="#555">Scatter — capteurs</text>
+  <rect x="525" y="236" width="120" height="18" rx="4" fill="#e0f7fa"/>
+  <text x="585" y="248" text-anchor="middle" font-size="7.5" fill="#006064">Canvas API · CDN</text>
+  <text x="585" y="280" text-anchor="middle" font-size="7" fill="#4dd0e1">responsive · maintainAspectRatio</text>
+
+  <!-- Carte Carte SVG -->
+  <rect x="671" y="124" width="140" height="172" rx="8" fill="white" stroke="#e91e63" stroke-width="1.5"/>
+  <rect x="671" y="124" width="140" height="30" rx="8" fill="#e91e63"/>
+  <text x="741" y="144" text-anchor="middle" font-size="10" font-weight="700" fill="white">🗺️ Carte SVG</text>
+  <text x="741" y="170" text-anchor="middle" font-size="8.5" fill="#880e4f" font-weight="600">Entrepôts animés</text>
+  <line x1="681" y1="178" x2="801" y2="178" stroke="#fce4ec" stroke-width="1"/>
+  <text x="741" y="194" text-anchor="middle" font-size="8" fill="#555">whSVG(wh, x, y)</text>
+  <text x="741" y="210" text-anchor="middle" font-size="8" fill="#555">updateSVGWarehouse(id)</text>
+  <text x="741" y="226" text-anchor="middle" font-size="8" fill="#555">riskFillPct(risk, score)</text>
+  <rect x="681" y="236" width="120" height="18" rx="4" fill="#fce4ec"/>
+  <text x="741" y="248" text-anchor="middle" font-size="7.5" fill="#880e4f">Fill animation A / B / C</text>
+  <text x="741" y="280" text-anchor="middle" font-size="7" fill="#f48fb1">NORMAL / SUSPECT / CRITIQUE</text>
+
+  <!-- Carte Auto-refresh -->
+  <rect x="827" y="124" width="102" height="172" rx="8" fill="white" stroke="#7b1fa2" stroke-width="1.5"/>
+  <rect x="827" y="124" width="102" height="30" rx="8" fill="#7b1fa2"/>
+  <text x="878" y="140" text-anchor="middle" font-size="9" font-weight="700" fill="white">🔄 Auto</text>
+  <text x="878" y="152" text-anchor="middle" font-size="9" font-weight="700" fill="white">Refresh</text>
+  <line x1="837" y1="162" x2="919" y2="162" stroke="#ede7f6" stroke-width="1"/>
+  <text x="878" y="180" text-anchor="middle" font-size="8" fill="#555">30 secondes</text>
+  <text x="878" y="196" text-anchor="middle" font-size="8" fill="#555">fetch /api/data</text>
+  <text x="878" y="212" text-anchor="middle" font-size="8" fill="#555">updateKPIs()</text>
+  <rect x="837" y="222" width="82" height="18" rx="4" fill="#ede7f6"/>
+  <text x="878" y="234" text-anchor="middle" font-size="7.5" fill="#4a148c">Live dot ●</text>
+  <text x="878" y="272" text-anchor="middle" font-size="7" fill="#ce93d8">setInterval(30000)</text>
+
+  <!-- FLÈCHE 1→2 -->
+  <line x1="480" y1="314" x2="480" y2="334" stroke="#9e9e9e" stroke-width="2"/>
+  <polygon points="475,334 480,346 485,334" fill="#9e9e9e"/>
+  <rect x="360" y="318" width="240" height="14" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+  <text x="480" y="329" text-anchor="middle" font-size="8.5" fill="#666">fetch('/api/…')  →  réponse JSON</text>
+
+  <!-- ══════════════════════════════════
+       COUCHE 2 : BACKEND
+       ══════════════════════════════════ -->
+  <rect x="16" y="348" width="928" height="200" rx="10" fill="#f1f8e9" stroke="#388e3c" stroke-width="1.5"/>
+  <rect x="16" y="348" width="928" height="32" rx="10" fill="#388e3c"/>
+  <text x="36" y="369" font-size="12" font-weight="700" fill="white">COUCHE 2 — BACKEND</text>
+  <text x="380" y="369" font-size="10" fill="#c8e6c9">app.py · Flask 3.0 · Python 3.13 · Port 5000</text>
+
+  <!-- GET / -->
+  <rect x="32" y="392" width="130" height="140" rx="8" fill="white" stroke="#66bb6a" stroke-width="1.5"/>
+  <rect x="32" y="392" width="130" height="26" rx="8" fill="#2e7d32"/>
+  <text x="97" y="409" text-anchor="middle" font-size="9" font-weight="700" fill="white">GET  /</text>
+  <text x="97" y="432" text-anchor="middle" font-size="8" fill="#1b5e20">send_from_directory</text>
+  <text x="97" y="448" text-anchor="middle" font-size="8" fill="#388e3c">Sert le fichier HTML</text>
+  <rect x="42" y="488" width="110" height="16" rx="4" fill="#e8f5e9"/>
+  <text x="97" y="499" text-anchor="middle" font-size="7.5" fill="#2e7d32">→ 200 OK</text>
+  <text x="97" y="520" text-anchor="middle" font-size="7" fill="#aaa">design_app/</text>
+
+  <!-- GET /api/data -->
+  <rect x="178" y="392" width="160" height="140" rx="8" fill="white" stroke="#66bb6a" stroke-width="1.5"/>
+  <rect x="178" y="392" width="160" height="26" rx="8" fill="#2e7d32"/>
+  <text x="258" y="409" text-anchor="middle" font-size="9" font-weight="700" fill="white">GET  /api/data</text>
+  <text x="258" y="432" text-anchor="middle" font-size="8" fill="#1b5e20">query_influx()</text>
+  <text x="258" y="448" text-anchor="middle" font-size="8" fill="#388e3c">tot · nc · ns · nn</text>
+  <text x="258" y="464" text-anchor="middle" font-size="8" fill="#388e3c">scenarios · wh_risk</text>
+  <rect x="188" y="478" width="140" height="16" rx="4" fill="#e8f5e9"/>
+  <text x="258" y="489" text-anchor="middle" font-size="7.5" fill="#2e7d32">→ JSON · connected bool</text>
+  <text x="258" y="520" text-anchor="middle" font-size="7" fill="#aaa">KPIs tableau de bord</text>
+
+  <!-- GET /api/alerts/history -->
+  <rect x="354" y="392" width="168" height="140" rx="8" fill="white" stroke="#ef9a9a" stroke-width="1.5"/>
+  <rect x="354" y="392" width="168" height="26" rx="8" fill="#c62828"/>
+  <text x="438" y="409" text-anchor="middle" font-size="9" font-weight="700" fill="white">GET  /api/alerts/history</text>
+  <text x="438" y="432" text-anchor="middle" font-size="8" fill="#b71c1c">critical_alerts · 30j</text>
+  <text x="438" y="448" text-anchor="middle" font-size="8" fill="#c62828">score ≤ −0.099</text>
+  <text x="438" y="464" text-anchor="middle" font-size="8" fill="#c62828">sort desc · limit 200</text>
+  <rect x="364" y="478" width="148" height="16" rx="4" fill="#ffebee"/>
+  <text x="438" y="489" text-anchor="middle" font-size="7.5" fill="#c62828">→ [{ts, device, scenario}]</text>
+  <text x="438" y="520" text-anchor="middle" font-size="7" fill="#aaa">Onglet Alertes</text>
+
+  <!-- GET /api/sensor/history -->
+  <rect x="538" y="392" width="168" height="140" rx="8" fill="white" stroke="#90caf9" stroke-width="1.5"/>
+  <rect x="538" y="392" width="168" height="26" rx="8" fill="#1565c0"/>
+  <text x="622" y="409" text-anchor="middle" font-size="9" font-weight="700" fill="white">GET  /api/sensor/history</text>
+  <text x="622" y="432" text-anchor="middle" font-size="8" fill="#0d47a1">sensor_events · 7j</text>
+  <text x="622" y="448" text-anchor="middle" font-size="8" fill="#1565c0">limit 500 · fallback</text>
+  <text x="622" y="464" text-anchor="middle" font-size="8" fill="#1565c0">80 pts démo si vide</text>
+  <rect x="548" y="478" width="148" height="16" rx="4" fill="#e3f2fd"/>
+  <text x="622" y="489" text-anchor="middle" font-size="7.5" fill="#1565c0">→ [{ts, device, score, risk}]</text>
+  <text x="622" y="520" text-anchor="middle" font-size="7" fill="#aaa">Onglet Logs</text>
+
+  <!-- POST /api/simulation/save -->
+  <rect x="722" y="392" width="168" height="140" rx="8" fill="white" stroke="#ffe082" stroke-width="1.5"/>
+  <rect x="722" y="392" width="168" height="26" rx="8" fill="#e65100"/>
+  <text x="806" y="409" text-anchor="middle" font-size="9" font-weight="700" fill="white">POST  /api/simulation/save</text>
+  <text x="806" y="432" text-anchor="middle" font-size="8" fill="#bf360c">Point('simulations')</text>
+  <text x="806" y="448" text-anchor="middle" font-size="8" fill="#e65100">.tag(entrepot, scenario)</text>
+  <text x="806" y="464" text-anchor="middle" font-size="8" fill="#e65100">WritePrecision.NS</text>
+  <rect x="732" y="478" width="148" height="16" rx="4" fill="#fff8e1"/>
+  <text x="806" y="489" text-anchor="middle" font-size="7.5" fill="#e65100">→ InfluxDB write</text>
+  <text x="806" y="520" text-anchor="middle" font-size="7" fill="#aaa">Sauvegarde simulation</text>
+
+  <!-- FLÈCHE 2→3 -->
+  <line x1="480" y1="550" x2="480" y2="570" stroke="#9e9e9e" stroke-width="2"/>
+  <polygon points="475,570 480,582 485,570" fill="#9e9e9e"/>
+  <rect x="340" y="554" width="280" height="14" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+  <text x="480" y="565" text-anchor="middle" font-size="8.5" fill="#666">Flux query · influxdb_client · HTTPS · WritePrecision.NS</text>
+
+  <!-- ══════════════════════════════════
+       COUCHE 3 : ML
+       ══════════════════════════════════ -->
+  <rect x="16" y="584" width="928" height="100" rx="10" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <rect x="16" y="584" width="928" height="32" rx="10" fill="#f57c00"/>
+  <text x="36" y="605" font-size="12" font-weight="700" fill="white">COUCHE 3 — ML / IA</text>
+  <text x="340" y="605" font-size="10" fill="#ffe082">pacte.ipynb · scikit-learn · pandas · numpy · Raspberry Pi</text>
+
+  <!-- 5 boîtes ML -->
+  <rect x="32" y="626" width="162" height="46" rx="6" fill="white" stroke="#ffe082" stroke-width="1.5"/>
+  <text x="113" y="642" text-anchor="middle" font-size="8.5" font-weight="700" fill="#e65100">1. CSV → DataFrame</text>
+  <text x="113" y="658" text-anchor="middle" font-size="8" fill="#777">405 184 lignes · pandas</text>
+  <text x="113" y="670" text-anchor="middle" font-size="7.5" fill="#aaa">co · lpg · temp · smoke · hum</text>
+
+  <line x1="196" y1="649" x2="214" y2="649" stroke="#f9a825" stroke-width="2"/>
+  <polygon points="214,645 224,649 214,653" fill="#f9a825"/>
+
+  <rect x="226" y="626" width="162" height="46" rx="6" fill="white" stroke="#ffe082" stroke-width="1.5"/>
+  <text x="307" y="642" text-anchor="middle" font-size="8.5" font-weight="700" fill="#e65100">2. Nettoyage &amp; Scale</text>
+  <text x="307" y="658" text-anchor="middle" font-size="8" fill="#777">dropna · StandardScaler</text>
+  <text x="307" y="670" text-anchor="middle" font-size="7.5" fill="#aaa">X_scaled · μ=0 · σ=1</text>
+
+  <line x1="390" y1="649" x2="408" y2="649" stroke="#f9a825" stroke-width="2"/>
+  <polygon points="408,645 418,649 408,653" fill="#f9a825"/>
+
+  <rect x="420" y="620" width="162" height="58" rx="6" fill="#fff3e0" stroke="#ff9800" stroke-width="2"/>
+  <text x="501" y="637" text-anchor="middle" font-size="8.5" font-weight="700" fill="#e65100">3. Isolation Forest ⭐</text>
+  <text x="501" y="651" text-anchor="middle" font-size="8" fill="#777">100 arbres · contam=0.1</text>
+  <text x="501" y="663" text-anchor="middle" font-size="7.5" fill="#f57c00">score_samples(X)</text>
+  <text x="501" y="674" text-anchor="middle" font-size="7" fill="#aaa">score ∈ [−1.0 , +0.5]</text>
+
+  <line x1="584" y1="649" x2="602" y2="649" stroke="#f9a825" stroke-width="2"/>
+  <polygon points="602,645 612,649 602,653" fill="#f9a825"/>
+
+  <rect x="614" y="626" width="162" height="46" rx="6" fill="white" stroke="#ffe082" stroke-width="1.5"/>
+  <text x="695" y="642" text-anchor="middle" font-size="8.5" font-weight="700" fill="#e65100">4. Seuils P5 / P10</text>
+  <text x="695" y="658" text-anchor="middle" font-size="8" fill="#777">CRITIQUE &lt; −0.099</text>
+  <text x="695" y="670" text-anchor="middle" font-size="7.5" fill="#aaa">SUSPECT &lt; −0.027</text>
+
+  <line x1="778" y1="649" x2="796" y2="649" stroke="#f9a825" stroke-width="2"/>
+  <polygon points="796,645 806,649 796,653" fill="#f9a825"/>
+
+  <rect x="808" y="626" width="120" height="46" rx="6" fill="white" stroke="#ffe082" stroke-width="1.5"/>
+  <text x="868" y="642" text-anchor="middle" font-size="8.5" font-weight="700" fill="#e65100">5. → InfluxDB</text>
+  <text x="868" y="658" text-anchor="middle" font-size="8" fill="#777">Raspberry Pi · 6 avr.</text>
+  <text x="868" y="670" text-anchor="middle" font-size="7.5" fill="#aaa">9 953 pts écrits</text>
+
+  <!-- FLÈCHE 3→4 -->
+  <line x1="480" y1="686" x2="480" y2="706" stroke="#9e9e9e" stroke-width="2"/>
+  <polygon points="475,706 480,718 485,706" fill="#9e9e9e"/>
+  <rect x="360" y="690" width="240" height="14" rx="5" fill="white" stroke="#ddd" stroke-width="1"/>
+  <text x="480" y="701" text-anchor="middle" font-size="8.5" fill="#666">write_api() · Line Protocol · HTTPS</text>
+
+  <!-- ══════════════════════════════════
+       COUCHE 4 : INFLUXDB
+       ══════════════════════════════════ -->
+  <rect x="16" y="720" width="928" height="160" rx="10" fill="#e0f7fa" stroke="#0097a7" stroke-width="1.5"/>
+  <rect x="16" y="720" width="928" height="32" rx="10" fill="#0097a7"/>
+  <text x="36" y="741" font-size="12" font-weight="700" fill="white">COUCHE 4 — BASE DE DONNÉES</text>
+  <text x="400" y="741" font-size="10" fill="#b2ebf2">InfluxDB Cloud · Bucket: pacte · Rétention 30 jours · Flux</text>
+
+  <!-- sensor_events -->
+  <rect x="32" y="762" width="280" height="104" rx="8" fill="white" stroke="#00838f" stroke-width="1.5"/>
+  <rect x="32" y="762" width="280" height="26" rx="8" fill="#00695c"/>
+  <text x="172" y="779" text-anchor="middle" font-size="10" font-weight="700" fill="white">📊  sensor_events</text>
+  <text x="172" y="804" text-anchor="middle" font-size="8.5" fill="#004d40" font-weight="600">9 953 points</text>
+  <text x="172" y="820" text-anchor="middle" font-size="8" fill="#555">Tags : device · risk_level</text>
+  <text x="172" y="836" text-anchor="middle" font-size="8" fill="#555">Field : anomaly_score (float)</text>
+  <rect x="42" y="846" width="260" height="14" rx="4" fill="#e0f7fa"/>
+  <text x="172" y="857" text-anchor="middle" font-size="7.5" fill="#00695c">range(−30d) · group(risk_level) · count()</text>
+
+  <!-- critical_alerts -->
+  <rect x="336" y="762" width="280" height="104" rx="8" fill="white" stroke="#e53935" stroke-width="1.5"/>
+  <rect x="336" y="762" width="280" height="26" rx="8" fill="#b71c1c"/>
+  <text x="476" y="779" text-anchor="middle" font-size="10" font-weight="700" fill="white">🚨  critical_alerts</text>
+  <text x="476" y="804" text-anchor="middle" font-size="8.5" fill="#7f0000" font-weight="600">57 213 points</text>
+  <text x="476" y="820" text-anchor="middle" font-size="8" fill="#555">Tags : device · scenario · risk_level</text>
+  <text x="476" y="836" text-anchor="middle" font-size="8" fill="#555">Field : anomaly_score (float)</text>
+  <rect x="346" y="846" width="260" height="14" rx="4" fill="#ffebee"/>
+  <text x="476" y="857" text-anchor="middle" font-size="7.5" fill="#b71c1c">filter(score ≤ −0.099) · sort(desc) · limit(200)</text>
+
+  <!-- simulations -->
+  <rect x="640" y="762" width="288" height="104" rx="8" fill="white" stroke="#f9a825" stroke-width="1.5"/>
+  <rect x="640" y="762" width="288" height="26" rx="8" fill="#e65100"/>
+  <text x="784" y="779" text-anchor="middle" font-size="10" font-weight="700" fill="white">🧪  simulations</text>
+  <text x="784" y="804" text-anchor="middle" font-size="8.5" fill="#bf360c" font-weight="600">Sauvegardé par Flask POST</text>
+  <text x="784" y="820" text-anchor="middle" font-size="8" fill="#555">Tags : entrepot · scenario</text>
+  <text x="784" y="836" text-anchor="middle" font-size="8" fill="#555">Fields : pts_total · recall · intensite · duree_sec</text>
+  <rect x="650" y="846" width="268" height="14" rx="4" fill="#fff8e1"/>
+  <text x="784" y="857" text-anchor="middle" font-size="7.5" fill="#e65100">pivot() · sort(desc) · limit(100) · range(−90d)</text>
+
+  <!-- Ombre portée (filtre) -->
+  <defs>
+    <filter id="sh" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.12)"/>
+    </filter>
+  </defs>
+</svg>

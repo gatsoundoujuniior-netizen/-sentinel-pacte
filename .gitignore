@@ -1,0 +1,35 @@
+# ── Secrets & credentials ─────────────────────────────────────────────────────
+.env
+docs/auth_config.yaml
+
+# ── Virtual environment ────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Claude Code internal ───────────────────────────────────────────────────────
+.claude/
+
+# ── Python cache ───────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ── Jupyter ────────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Large dataset (405k lignes — télécharger via lien dans README) ─────────────
+data/pacte_risk_log.csv
+
+# ── PDFs de normes copyrightées (IEC 61511, ISPS, ATEX) ───────────────────────
+docs/IEC61511-2-2003.pdf
+docs/ISPS-Code-2003-English.pdf
+docs/CELEX_32014L0034_EN_TXT.pdf
+docs/is.iec.61511.1.2003.pdf
+
+# ── OS ─────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

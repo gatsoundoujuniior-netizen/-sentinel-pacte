@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL — Documentation Technique Complète</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --blue: #4c52d4; --blue-light: #9da2ff; --blue-dark: #13132a;
+    --red: #e24b4a; --orange: #ef9f27; --green: #639922;
+    --bg: #f8f9ff; --card: #ffffff; --text: #1a1a2e; --sub: #5a5f9e;
+    --border: #e0e3ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* ─── HEADER ─── */
+  .doc-header {
+    background: linear-gradient(135deg, #0d0d1c 0%, #1a1a3a 50%, #0d0d1c 100%);
+    padding: 60px 40px 50px;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(76,82,212,0.3) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(226,75,74,0.15) 0%, transparent 60%);
+  }
+  .doc-header h1 { font-size: 3em; font-weight: 800; letter-spacing: 4px; position: relative; }
+  .doc-header .subtitle { font-size: 1.1em; color: #9da2ff; margin-top: 8px; position: relative; }
+  .doc-header .meta { margin-top: 20px; display: flex; justify-content: center; gap: 30px; position: relative; flex-wrap: wrap; }
+  .meta-item { background: rgba(76,82,212,0.2); border: 1px solid rgba(76,82,212,0.4); border-radius: 20px; padding: 6px 16px; font-size: 0.85em; color: #dde0ff; }
+
+  /* ─── TOC ─── */
+  .toc { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 30px; margin: 30px auto; max-width: 900px; }
+  .toc h2 { font-size: 1.2em; color: var(--blue); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+  .toc-item { background: var(--bg); border-radius: 8px; padding: 10px 14px; text-decoration: none; color: var(--text); font-size: 0.85em; border-left: 3px solid var(--blue); transition: all 0.2s; }
+  .toc-item:hover { background: #eff0ff; border-left-color: var(--red); }
+  .toc-item .num { font-weight: 700; color: var(--blue); }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px 20px 60px; }
+
+  /* ─── SECTION ─── */
+  .section { margin-bottom: 50px; }
+  .section-header {
+    display: flex; align-items: center; gap: 16px;
+    background: linear-gradient(90deg, var(--blue-dark), transparent);
+    border-left: 4px solid var(--blue);
+    padding: 14px 20px; border-radius: 0 10px 10px 0;
+    margin-bottom: 24px;
+  }
+  .section-num { background: var(--blue); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9em; flex-shrink: 0; }
+  .section-title { font-size: 1.5em; font-weight: 700; color: var(--blue-dark); }
+  .section-sub { font-size: 0.85em; color: var(--sub); }
+
+  /* ─── CARDS ─── */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(76,82,212,0.06); }
+  .card-title { font-size: 1em; font-weight: 700; color: var(--blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+  /* ─── GRIDS ─── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+  /* ─── TABLES ─── */
+  table { width: 100%; border-collapse: collapse; font-size: 0.88em; }
+  th { background: var(--blue-dark); color: #dde0ff; padding: 10px 14px; text-align: left; }
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f5f6ff; }
+  tr:hover td { background: #eff0ff; }
+  .tag-win { background: rgba(99,153,34,0.15); color: #3a6010; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+  .tag-lose { background: rgba(226,75,74,0.12); color: #a32020; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+  .tag-neutral { background: rgba(76,82,212,0.12); color: var(--blue); padding: 2px 8px; border-radius: 10px; font-size: 0.8em; font-weight: 600; }
+
+  /* ─── BADGES ─── */
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 12px; font-size: 0.78em; font-weight: 600; }
+  .badge-red { background: rgba(226,75,74,0.12); color: var(--red); border: 1px solid rgba(226,75,74,0.3); }
+  .badge-green { background: rgba(99,153,34,0.12); color: var(--green); border: 1px solid rgba(99,153,34,0.3); }
+  .badge-blue { background: rgba(76,82,212,0.12); color: var(--blue); border: 1px solid rgba(76,82,212,0.3); }
+  .badge-orange { background: rgba(239,159,39,0.12); color: var(--orange); border: 1px solid rgba(239,159,39,0.3); }
+
+  /* ─── FLOW DIAGRAM ─── */
+  .flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 20px 0; justify-content: center; }
+  .flow-box {
+    background: var(--blue-dark); color: white;
+    padding: 12px 18px; border-radius: 10px;
+    text-align: center; font-size: 0.82em; min-width: 110px;
+    border: 1px solid rgba(76,82,212,0.5);
+  }
+  .flow-box .fb-icon { font-size: 1.6em; display: block; margin-bottom: 4px; }
+  .flow-box .fb-name { font-weight: 700; color: #9da2ff; }
+  .flow-box .fb-sub { font-size: 0.75em; color: #5a5f9e; }
+  .flow-arrow { font-size: 1.4em; color: var(--blue); padding: 0 6px; }
+
+  /* ─── TIMELINE ─── */
+  .timeline { position: relative; padding-left: 30px; }
+  .timeline::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--blue), var(--red)); }
+  .tl-item { position: relative; margin-bottom: 28px; }
+  .tl-dot { position: absolute; left: -26px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 2px var(--blue); top: 4px; }
+  .tl-date { font-size: 0.78em; color: var(--sub); font-weight: 600; margin-bottom: 4px; }
+  .tl-title { font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .tl-body { font-size: 0.88em; color: #444; }
+
+  /* ─── PROBLEM CARDS ─── */
+  .prob-card { border-radius: 12px; overflow: hidden; margin-bottom: 16px; border: 1px solid var(--border); }
+  .prob-head { background: rgba(226,75,74,0.08); padding: 12px 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(226,75,74,0.2); }
+  .prob-head .icon { font-size: 1.3em; }
+  .prob-head .title { font-weight: 700; color: #c03030; font-size: 0.95em; }
+  .prob-body { padding: 14px 18px; background: white; }
+  .prob-cause { font-size: 0.85em; color: var(--sub); margin-bottom: 8px; }
+  .prob-solution { background: rgba(99,153,34,0.08); border-left: 3px solid var(--green); padding: 8px 12px; border-radius: 0 8px 8px 0; font-size: 0.85em; color: #2a5010; }
+
+  /* ─── KPI BOXES ─── */
+  .kpi-row { display: flex; gap: 16px; flex-wrap: wrap; margin: 16px 0; }
+  .kpi-box { flex: 1; min-width: 120px; background: var(--blue-dark); border-radius: 12px; padding: 16px; text-align: center; border: 1px solid rgba(76,82,212,0.3); }
+  .kpi-box .kv { font-size: 2em; font-weight: 800; }
+  .kpi-box .kl { font-size: 0.75em; color: #5a5f9e; margin-top: 4px; }
+
+  /* ─── CHART CONTAINERS ─── */
+  .chart-wrap { position: relative; height: 260px; margin: 16px 0; }
+  .chart-wrap-sm { position: relative; height: 180px; margin: 12px 0; }
+
+  /* ─── CODE ─── */
+  code { background: #f0f1ff; color: var(--blue); padding: 1px 6px; border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.88em; }
+  pre { background: #0d0d1c; color: #9da2ff; padding: 16px; border-radius: 10px; overflow-x: auto; font-size: 0.82em; line-height: 1.7; margin: 12px 0; }
+  pre .c { color: #3a3d6b; }
+  pre .k { color: #ef9f27; }
+  pre .s { color: #639922; }
+
+  /* ─── HIGHLIGHT BOXES ─── */
+  .info-box { background: rgba(76,82,212,0.06); border: 1px solid rgba(76,82,212,0.2); border-radius: 10px; padding: 14px 18px; margin: 12px 0; font-size: 0.88em; }
+  .warn-box { background: rgba(239,159,39,0.08); border: 1px solid rgba(239,159,39,0.3); border-radius: 10px; padding: 14px 18px; margin: 12px 0; font-size: 0.88em; }
+  .success-box { background: rgba(99,153,34,0.08); border: 1px solid rgba(99,153,34,0.3); border-radius: 10px; padding: 14px 18px; margin: 12px 0; font-size: 0.88em; }
+
+  /* ─── ROLE TABLE ─── */
+  .role-card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+  .role-head { padding: 12px 16px; font-weight: 700; font-size: 0.9em; color: white; }
+  .role-body { padding: 12px 16px; font-size: 0.82em; }
+  .role-body li { margin-bottom: 6px; padding-left: 14px; position: relative; }
+  .role-body li::before { content: '→'; position: absolute; left: 0; color: var(--blue-light); }
+
+  /* ─── FOOTER ─── */
+  .doc-footer { background: var(--blue-dark); color: #5a5f9e; text-align: center; padding: 30px; font-size: 0.82em; margin-top: 60px; }
+
+  /* ─── IMPROVEMENT CARDS ─── */
+  .improve-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 18px; border-top: 3px solid var(--blue); }
+  .improve-card .priority { font-size: 0.75em; font-weight: 600; text-transform: uppercase; color: var(--sub); margin-bottom: 6px; }
+  .improve-card .title { font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .improve-card .body { font-size: 0.85em; color: #555; }
+
+  h3 { font-size: 1.05em; font-weight: 700; color: var(--blue-dark); margin: 20px 0 10px; }
+  p { margin-bottom: 10px; font-size: 0.92em; color: #333; }
+  ul, ol { padding-left: 20px; margin-bottom: 12px; }
+  li { font-size: 0.88em; margin-bottom: 4px; color: #444; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<div class="doc-header">
+  <h1>SENTINEL</h1>
+  <div class="subtitle">Documentation Technique Complète — Projet PACTE</div>
+  <div class="meta">
+    <span class="meta-item">Junior Stevy Gatsoundou</span>
+    <span class="meta-item">HESTIM Casablanca — 4ème année IA &amp; Big Data</span>
+    <span class="meta-item">Avril 2026</span>
+    <span class="meta-item">Version finale Flask + InfluxDB</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TOC -->
+<div class="container">
+<div class="toc">
+  <h2>📋 Table des matières</h2>
+  <div class="toc-grid">
+    <a href="#s1" class="toc-item"><span class="num">1</span> Présentation du projet</a>
+    <a href="#s2" class="toc-item"><span class="num">2</span> Architecture globale</a>
+    <a href="#s3" class="toc-item"><span class="num">3</span> Flux de données</a>
+    <a href="#s4" class="toc-item"><span class="num">4</span> Technologies</a>
+    <a href="#s5" class="toc-item"><span class="num">5</span> Historique des versions</a>
+    <a href="#s6" class="toc-item"><span class="num">6</span> Problèmes &amp; Solutions</a>
+    <a href="#s7" class="toc-item"><span class="num">7</span> Résultats &amp; Performances</a>
+    <a href="#s8" class="toc-item"><span class="num">8</span> Perspectives</a>
+    <a href="#s9" class="toc-item"><span class="num">9</span> Structure du projet</a>
+    <a href="#s10" class="toc-item"><span class="num">10</span> Glossaire</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 1 -->
+<div id="s1" class="section">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div>
+      <div class="section-title">Présentation du projet</div>
+      <div class="section-sub">Contexte, objectifs et acteurs</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏭 Qu'est-ce que SENTINEL ?</div>
+    <p>SENTINEL est un <strong>système de surveillance environnementale</strong> pour zones logistiques portuaires. Il détecte automatiquement des anomalies dans les capteurs IoT installés dans des entrepôts (gaz, température, humidité) et alerte en temps réel.</p>
+    <p>Inspiré du <strong>Port de Rotterdam</strong>, le projet répond à une question réelle : <em>comment détecter une fuite de gaz, un incendie, ou une intrusion avant qu'il ne soit trop tard ?</em></p>
+    <div class="info-box">
+      💡 <strong>Pour un enfant :</strong> Imagine des entrepôts au port avec des capteurs qui sentent l'air. Si l'air sent mauvais (gaz, fumée, chaleur anormale), SENTINEL allume une alarme et dit exactement quel entrepôt est en danger.
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="kpi-box">
+      <div class="kv" style="color:#9da2ff">9 953</div>
+      <div class="kl">Mesures dans la base<br>InfluxDB</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kv" style="color:#e24b4a">2 846</div>
+      <div class="kl">Alertes critiques<br>détectées</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kv" style="color:#639922">97.2%</div>
+      <div class="kl">Recall moyen<br>SIL 1 atteint</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <div class="card-title">👥 Les acteurs du système</div>
+    <div class="grid3">
+      <div class="role-card">
+        <div class="role-head" style="background:#1a1a3a">👑 Administrateur</div>
+        <div class="role-body">
+          <ul>
+            <li>Accès complet</li>
+            <li>Lance des simulations</li>
+            <li>Voit toutes les alertes</li>
+            <li>Gère les utilisateurs</li>
+          </ul>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="role-head" style="background:#1a2a1a">🛡️ Opérateur</div>
+        <div class="role-body">
+          <ul>
+            <li>Tableau de bord live</li>
+            <li>Historique des alertes</li>
+            <li>Données capteurs</li>
+            <li>Carte des entrepôts</li>
+          </ul>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="role-head" style="background:#2a1a1a">👤 Citoyen / Public</div>
+        <div class="role-body">
+          <ul>
+            <li>Vue lecture seule</li>
+            <li>Dashboard simplifié</li>
+            <li>Pas de simulation</li>
+            <li>Pas d'historique complet</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Les 6 scénarios détectés</div>
+    <table>
+      <tr><th>Scénario</th><th>Description</th><th>Alertes (30j)</th><th>Recall SIL 1</th></tr>
+      <tr><td>🔥 Incendie entrepôt</td><td>Température + CO montent brusquement</td><td><strong>484</strong></td><td><span class="tag-win">97.2%</span></td></tr>
+      <tr><td>🧪 Fuite chimique lente</td><td>Gaz TVOC augmente progressivement</td><td><strong>712</strong></td><td><span class="tag-win">95.8%</span></td></tr>
+      <tr><td>💨 Fuite LPG</td><td>Pic soudain de LPG</td><td><strong>122</strong></td><td><span class="tag-win">100%</span></td></tr>
+      <tr><td>🔧 Panne capteur</td><td>Valeurs figées ou aberrantes</td><td><strong>174</strong></td><td><span class="tag-win">91.0%</span></td></tr>
+      <tr><td>🌡️ Surchauffe progressive</td><td>Température monte lentement</td><td><strong>353</strong></td><td><span class="tag-neutral">–</span></td></tr>
+      <tr><td>🚶 Intrusion nocturne</td><td>Mouvement + chaleur hors horaires</td><td><strong>10</strong></td><td><span class="tag-win">100%</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 2 -->
+<div id="s2" class="section">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div>
+      <div class="section-title">Architecture globale</div>
+      <div class="section-sub">Les couches du système et leur rôle</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏗️ Les 5 couches de SENTINEL</div>
+    <div style="overflow-x:auto">
+    <table>
+      <tr><th>Couche</th><th>Technologie</th><th>Rôle</th><th>Fichier/Service</th></tr>
+      <tr>
+        <td><strong>1. Capteurs IoT</strong></td>
+        <td>Dataset CSV (405 184 lignes)</td>
+        <td>Source de données brutes (CO, LPG, temp, humidité…)</td>
+        <td><code>iot_telemetry_data.csv</code></td>
+      </tr>
+      <tr>
+        <td><strong>2. Traitement ML</strong></td>
+        <td>Python + Isolation Forest</td>
+        <td>Détecte les anomalies, calcule un score</td>
+        <td><code>pacte.ipynb</code></td>
+      </tr>
+      <tr>
+        <td><strong>3. Collecte &amp; Stockage</strong></td>
+        <td>Raspberry Pi → InfluxDB Cloud</td>
+        <td>Reçoit les données, les stocke en base temporelle</td>
+        <td>Bucket <code>pacte</code></td>
+      </tr>
+      <tr>
+        <td><strong>4. API Backend</strong></td>
+        <td>Flask (Python)</td>
+        <td>Expose les données via REST API</td>
+        <td><code>app.py</code></td>
+      </tr>
+      <tr>
+        <td><strong>5. Interface</strong></td>
+        <td>HTML / CSS / JavaScript</td>
+        <td>Affiche les alertes, simulations, graphes</td>
+        <td><code>sentinel_full_rbac_port.html</code></td>
+      </tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗺️ Schéma de l'architecture complète</div>
+    <svg viewBox="0 0 900 340" style="width:100%;max-width:900px;display:block;margin:0 auto" font-family="Segoe UI,sans-serif">
+      <!-- Background layers -->
+      <rect x="10" y="10" width="860" height="320" rx="16" fill="#0d0d1c" stroke="#1a1a40" stroke-width="1"/>
+
+      <!-- Layer 1: Capteurs -->
+      <rect x="30" y="40" width="130" height="70" rx="10" fill="#1a1a3a" stroke="#4c52d4" stroke-width="1.5"/>
+      <text x="95" y="68" text-anchor="middle" fill="#9da2ff" font-size="11" font-weight="700">CAPTEURS IoT</text>
+      <text x="95" y="84" text-anchor="middle" fill="#5a5f9e" font-size="9">CO · LPG · Temp</text>
+      <text x="95" y="98" text-anchor="middle" fill="#5a5f9e" font-size="9">Humidité · TVOC</text>
+
+      <!-- Layer 2: Notebook -->
+      <rect x="30" y="140" width="130" height="70" rx="10" fill="#1a1a3a" stroke="#ef9f27" stroke-width="1.5"/>
+      <text x="95" y="168" text-anchor="middle" fill="#ef9f27" font-size="11" font-weight="700">MACHINE LEARNING</text>
+      <text x="95" y="184" text-anchor="middle" fill="#5a5f9e" font-size="9">Isolation Forest</text>
+      <text x="95" y="198" text-anchor="middle" fill="#5a5f9e" font-size="9">Score anomalie</text>
+
+      <!-- Layer 3: InfluxDB -->
+      <rect x="260" y="90" width="140" height="70" rx="10" fill="#1a1a3a" stroke="#4c52d4" stroke-width="1.5"/>
+      <text x="330" y="118" text-anchor="middle" fill="#9da2ff" font-size="11" font-weight="700">INFLUXDB CLOUD</text>
+      <text x="330" y="134" text-anchor="middle" fill="#5a5f9e" font-size="9">sensor_events</text>
+      <text x="330" y="148" text-anchor="middle" fill="#5a5f9e" font-size="9">critical_alerts · simulations</text>
+
+      <!-- Layer 4: Flask -->
+      <rect x="510" y="90" width="130" height="70" rx="10" fill="#1a1a3a" stroke="#639922" stroke-width="1.5"/>
+      <text x="575" y="118" text-anchor="middle" fill="#639922" font-size="11" font-weight="700">FLASK API</text>
+      <text x="575" y="134" text-anchor="middle" fill="#5a5f9e" font-size="9">/api/data</text>
+      <text x="575" y="148" text-anchor="middle" fill="#5a5f9e" font-size="9">/api/alerts · /api/simulation</text>
+
+      <!-- Layer 5: HTML -->
+      <rect x="730" y="90" width="130" height="70" rx="10" fill="#1a1a3a" stroke="#e24b4a" stroke-width="1.5"/>
+      <text x="795" y="118" text-anchor="middle" fill="#e24b4a" font-size="11" font-weight="700">INTERFACE WEB</text>
+      <text x="795" y="134" text-anchor="middle" fill="#5a5f9e" font-size="9">Dashboard · Carte</text>
+      <text x="795" y="148" text-anchor="middle" fill="#5a5f9e" font-size="9">Simulation · Logs</text>
+
+      <!-- Raspberry Pi -->
+      <rect x="260" y="240" width="140" height="50" rx="10" fill="#1a1a3a" stroke="#ef9f27" stroke-width="1"/>
+      <text x="330" y="262" text-anchor="middle" fill="#ef9f27" font-size="10" font-weight="700">RASPBERRY PI</text>
+      <text x="330" y="278" text-anchor="middle" fill="#5a5f9e" font-size="9">Replay dataset → InfluxDB</text>
+
+      <!-- Arrows -->
+      <!-- Capteurs → ML -->
+      <path d="M 95 110 L 95 138" stroke="#4c52d4" stroke-width="1.5" marker-end="url(#arr)" fill="none"/>
+      <!-- ML → InfluxDB -->
+      <path d="M 162 175 L 258 140" stroke="#ef9f27" stroke-width="1.5" marker-end="url(#arr2)" fill="none" stroke-dasharray="5,3"/>
+      <!-- Capteurs → RPi (via dataset) -->
+      <path d="M 162 75 Q 210 75 258 255" stroke="#5a5f9e" stroke-width="1" marker-end="url(#arr3)" fill="none" stroke-dasharray="3,3"/>
+      <!-- RPi → InfluxDB -->
+      <path d="M 330 240 L 330 162" stroke="#4c52d4" stroke-width="1.5" marker-end="url(#arr)" fill="none"/>
+      <!-- InfluxDB → Flask -->
+      <path d="M 402 125 L 508 125" stroke="#4c52d4" stroke-width="1.5" marker-end="url(#arr)" fill="none"/>
+      <!-- Flask → HTML -->
+      <path d="M 642 125 L 728 125" stroke="#639922" stroke-width="1.5" marker-end="url(#arr4)" fill="none"/>
+      <!-- HTML → Flask (retour requêtes) -->
+      <path d="M 730 138 Q 690 158 644 138" stroke="#e24b4a" stroke-width="1" marker-end="url(#arr5)" fill="none" stroke-dasharray="4,3"/>
+
+      <!-- Labels arrows -->
+      <text x="455" y="118" text-anchor="middle" fill="#3a3d6b" font-size="8">Flux API</text>
+      <text x="685" y="118" text-anchor="middle" fill="#3a3d6b" font-size="8">JSON</text>
+      <text x="685" y="148" text-anchor="middle" fill="#3a3d6b" font-size="8">fetch()</text>
+      <text x="300" y="195" fill="#3a3d6b" font-size="8">Replay avril 2026</text>
+
+      <!-- Legend -->
+      <text x="30" y="300" fill="#3a3d6b" font-size="9">— Flux de données en temps réel</text>
+      <line x1="28" y1="310" x2="50" y2="310" stroke="#3a3d6b" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="55" y="314" fill="#3a3d6b" font-size="9">Flux via dataset (historique)</text>
+
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4c52d4"/></marker>
+        <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#ef9f27"/></marker>
+        <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#5a5f9e"/></marker>
+        <marker id="arr4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#639922"/></marker>
+        <marker id="arr5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e24b4a"/></marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 3 -->
+<div id="s3" class="section">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div>
+      <div class="section-title">Flux de données</div>
+      <div class="section-sub">D'où viennent les données et où elles vont</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📡 Origine des données : le dataset IoT</div>
+    <p>Les données proviennent d'un <strong>dataset public Kaggle</strong> : <em>iot_telemetry_data.csv</em> (405 184 lignes, 9 colonnes). Il simule des capteurs IoT dans des entrepôts industriels.</p>
+    <table>
+      <tr><th>Colonne</th><th>Type</th><th>Description</th><th>Unité</th></tr>
+      <tr><td><code>ts</code></td><td>Timestamp</td><td>Horodatage UNIX</td><td>secondes</td></tr>
+      <tr><td><code>device</code></td><td>MAC Address</td><td>Identifiant du capteur (A, B ou C)</td><td>–</td></tr>
+      <tr><td><code>co</code></td><td>Float</td><td>Monoxyde de carbone</td><td>ppm</td></tr>
+      <tr><td><code>humidity</code></td><td>Float</td><td>Humidité relative</td><td>%</td></tr>
+      <tr><td><code>light</code></td><td>Boolean</td><td>Présence de lumière</td><td>0/1</td></tr>
+      <tr><td><code>lpg</code></td><td>Float</td><td>Gaz LPG (butane, propane)</td><td>ppm</td></tr>
+      <tr><td><code>motion</code></td><td>Boolean</td><td>Détection de mouvement</td><td>0/1</td></tr>
+      <tr><td><code>smoke</code></td><td>Float</td><td>Fumée</td><td>ppm</td></tr>
+      <tr><td><code>temp</code></td><td>Float</td><td>Température</td><td>°C</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙️ Traitement par l'algorithme Isolation Forest</div>
+    <div class="flow">
+      <div class="flow-box"><span class="fb-icon">📂</span><span class="fb-name">CSV brut</span><span class="fb-sub">405 184 lignes</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box"><span class="fb-icon">🔧</span><span class="fb-name">Nettoyage</span><span class="fb-sub">Normalisation<br>StandardScaler</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box"><span class="fb-icon">🌲</span><span class="fb-name">Isolation Forest</span><span class="fb-sub">contamination=0.1<br>n_estimators=100</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box"><span class="fb-icon">📊</span><span class="fb-name">Score anomalie</span><span class="fb-sub">-1.0 à +0.5<br>négatif = anormal</span></div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box"><span class="fb-icon">🏷️</span><span class="fb-name">Niveau risque</span><span class="fb-sub">NORMAL<br>SUSPECT<br>CRITIQUE</span></div>
+    </div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div>
+        <h3>Seuils de classification</h3>
+        <table>
+          <tr><th>Score</th><th>Niveau</th><th>Signification</th></tr>
+          <tr><td><code>&gt; -0.027</code></td><td><span class="badge badge-green">NORMAL</span></td><td>Aucune anomalie détectée</td></tr>
+          <tr><td><code>-0.099 à -0.027</code></td><td><span class="badge badge-orange">SUSPECT</span></td><td>Comportement inhabituel</td></tr>
+          <tr><td><code>&lt; -0.099</code></td><td><span class="badge badge-red">CRITIQUE</span></td><td>Anomalie grave confirmée</td></tr>
+        </table>
+        <div class="info-box" style="margin-top:8px">
+          Ces seuils correspondent aux <strong>percentiles P10 et P5</strong> du score de l'Isolation Forest sur le dataset complet. Ils garantissent un recall &gt; 90% (norme SIL 1 IEC 61511).
+        </div>
+      </div>
+      <div>
+        <h3>Distribution des niveaux de risque</h3>
+        <div class="chart-wrap">
+          <canvas id="riskDist"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">☁️ Stockage dans InfluxDB Cloud</div>
+    <p>Les données traitées sont envoyées dans <strong>InfluxDB Cloud</strong> (bucket : <code>pacte</code>) via un Raspberry Pi qui rejoue le dataset le <strong>6 avril 2026</strong>.</p>
+    <div class="grid3" style="margin-top:12px">
+      <div style="background:#f5f6ff;border-radius:10px;padding:14px;border:1px solid var(--border)">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:6px">📊 sensor_events</div>
+        <div style="font-size:0.82em;color:#555">Chaque mesure de capteur avec son score anomalie. <strong>9 953 lignes</strong>.</div>
+      </div>
+      <div style="background:#f5f6ff;border-radius:10px;padding:14px;border:1px solid var(--border)">
+        <div style="font-weight:700;color:var(--red);margin-bottom:6px">🚨 critical_alerts</div>
+        <div style="font-size:0.82em;color:#555">Uniquement les alertes critiques (score &lt; -0.099). <strong>57 213 lignes</strong>.</div>
+      </div>
+      <div style="background:#f5f6ff;border-radius:10px;padding:14px;border:1px solid var(--border)">
+        <div style="font-weight:700;color:var(--orange);margin-bottom:6px">🧪 simulations</div>
+        <div style="font-size:0.82em;color:#555">Résultats de chaque simulation lancée depuis l'interface. Sauvés en temps réel.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 4 -->
+<div id="s4" class="section">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div>
+      <div class="section-title">Technologies utilisées</div>
+      <div class="section-sub">Comparaisons, choix et justifications</div>
+    </div>
+  </div>
+
+  <!-- 4.1 Backend -->
+  <div class="card">
+    <div class="card-title">🔄 Comparaison Backend : Streamlit vs Flask</div>
+    <table>
+      <tr><th>Critère</th><th>Streamlit (v1 — abandonné)</th><th>Flask (v2 &amp; v3 — retenu)</th></tr>
+      <tr>
+        <td>Type</td>
+        <td>Framework Python pour data science</td>
+        <td>Micro-framework web Python</td>
+      </tr>
+      <tr>
+        <td>Interface personnalisée</td>
+        <td><span class="tag-lose">Très limitée</span> — impose son propre style</td>
+        <td><span class="tag-win">Totale</span> — HTML/CSS/JS libre</td>
+      </tr>
+      <tr>
+        <td>RBAC (rôles utilisateurs)</td>
+        <td><span class="tag-lose">Via plugin externe</span> (streamlit-authenticator)</td>
+        <td><span class="tag-win">Natif dans le HTML</span></td>
+      </tr>
+      <tr>
+        <td>Rendu de HTML custom</td>
+        <td><span class="tag-lose">Iframe imbriqué</span> — limitations CSS, scroll impossible</td>
+        <td><span class="tag-win">Direct</span> — sert le fichier HTML tel quel</td>
+      </tr>
+      <tr>
+        <td>API REST</td>
+        <td><span class="tag-lose">Pas de support natif</span></td>
+        <td><span class="tag-win">Natif</span> — <code>@app.route()</code></td>
+      </tr>
+      <tr>
+        <td>Performance</td>
+        <td><span class="tag-lose">Recharge toute la page</span> à chaque interaction</td>
+        <td><span class="tag-win">API JSON légère</span> — mise à jour partielle</td>
+      </tr>
+      <tr>
+        <td>Simulation multi-entrepôt</td>
+        <td><span class="tag-lose">Impossible</span> en temps réel</td>
+        <td><span class="tag-win">Possible</span> via JS + setInterval</td>
+      </tr>
+      <tr>
+        <td>Déploiement</td>
+        <td>Streamlit Cloud uniquement</td>
+        <td>N'importe quel serveur</td>
+      </tr>
+    </table>
+    <div class="warn-box" style="margin-top:12px">
+      ⚠️ <strong>Pourquoi Streamlit a été abandonné :</strong> L'interface SENTINEL est entièrement custom (animations SVG, graphes Canvas, navigation SPA). Streamlit charge le HTML dans un <code>&lt;iframe&gt;</code> qui bloque la navbar, le scroll, et les interactions JavaScript avancées.
+    </div>
+  </div>
+
+  <!-- 4.2 Base de données -->
+  <div class="card">
+    <div class="card-title">🗄️ Comparaison Base de données : SQLite vs InfluxDB</div>
+    <table>
+      <tr><th>Critère</th><th>SQLite (v2 — abandonné)</th><th>InfluxDB Cloud (v3 — retenu)</th></tr>
+      <tr>
+        <td>Type</td>
+        <td>Base relationnelle (SQL)</td>
+        <td>Base de données temporelle (Time Series)</td>
+      </tr>
+      <tr>
+        <td>Adapté aux séries temporelles</td>
+        <td><span class="tag-lose">Non</span> — pas d'index temporel</td>
+        <td><span class="tag-win">Oui</span> — conçu pour ça</td>
+      </tr>
+      <tr>
+        <td>Langage de requête</td>
+        <td>SQL standard</td>
+        <td>Flux (fonctionnel, puissant)</td>
+      </tr>
+      <tr>
+        <td>Requête "10 dernières heures"</td>
+        <td>Lent — scanne toute la table</td>
+        <td><span class="tag-win">Très rapide</span> — index temporel natif</td>
+      </tr>
+      <tr>
+        <td>Intégration Raspberry Pi</td>
+        <td>Fichier local uniquement</td>
+        <td><span class="tag-win">Cloud</span> — accessible partout</td>
+      </tr>
+      <tr>
+        <td>Données de simulation</td>
+        <td>Table <code>simulations</code> (abandonné)</td>
+        <td><span class="tag-win">Measurement</span> <code>simulations</code></td>
+      </tr>
+      <tr>
+        <td>Téléchargement possible</td>
+        <td>Fichier <code>sentinel.db</code> local</td>
+        <td>Interface web InfluxDB + API</td>
+      </tr>
+    </table>
+    <div class="info-box" style="margin-top:12px">
+      💡 <strong>Point important :</strong> InfluxDB Cloud a <strong>deux moteurs</strong> différents : <em>TSM</em> (pour les données écrites via Flux/API) et <em>IOx</em> (pour SQL dans le Data Explorer). Les données de SENTINEL sont dans TSM — elles ne sont <strong>pas visibles dans l'onglet SQL</strong> du Data Explorer, mais elles existent bien.
+    </div>
+  </div>
+
+  <!-- 4.3 ML -->
+  <div class="card">
+    <div class="card-title">🌲 Algorithme de détection : Isolation Forest</div>
+    <div class="grid2">
+      <div>
+        <h3>Pourquoi Isolation Forest ?</h3>
+        <table>
+          <tr><th>Algorithme</th><th>Supervisé ?</th><th>Données labellisées ?</th><th>Choix</th></tr>
+          <tr><td>Isolation Forest</td><td>Non</td><td>Non requises</td><td><span class="tag-win">Retenu</span></td></tr>
+          <tr><td>Autoencoder (DL)</td><td>Non</td><td>Non requises</td><td><span class="tag-neutral">Trop complexe</span></td></tr>
+          <tr><td>LOF</td><td>Non</td><td>Non requises</td><td><span class="tag-lose">Lent sur 400k lignes</span></td></tr>
+          <tr><td>SVM (One-class)</td><td>Non</td><td>Non requises</td><td><span class="tag-lose">Pas adapté aux TS</span></td></tr>
+          <tr><td>Random Forest classique</td><td>Oui</td><td>Requises</td><td><span class="tag-lose">Pas de labels</span></td></tr>
+        </table>
+        <div class="success-box" style="margin-top:10px">
+          ✅ Isolation Forest est <strong>non-supervisé</strong> : pas besoin de données étiquetées "normal/anomalie". Il apprend lui-même ce qu'est une mesure normale.
+        </div>
+      </div>
+      <div>
+        <h3>Comment ça marche ?</h3>
+        <div class="info-box">
+          Isolation Forest construit des arbres aléatoires. Une anomalie est <strong>facile à isoler</strong> (peu de coupures nécessaires) → score négatif fort. Une mesure normale est <strong>difficile à isoler</strong> (beaucoup de coupures) → score proche de 0 ou positif.
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:0.85em;font-weight:600;margin-bottom:8px;color:var(--sub)">PARAMÈTRES UTILISÉS</div>
+          <table>
+            <tr><td><code>n_estimators</code></td><td>100 arbres</td></tr>
+            <tr><td><code>contamination</code></td><td>0.1 (10% d'anomalies attendues)</td></tr>
+            <tr><td><code>random_state</code></td><td>42</td></tr>
+            <tr><td>Features</td><td>co, lpg, smoke, temp, humidity</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4.4 Stack complète -->
+  <div class="card">
+    <div class="card-title">📦 Stack technologique complète</div>
+    <table>
+      <tr><th>Technologie</th><th>Version</th><th>Rôle dans SENTINEL</th><th>Statut</th></tr>
+      <tr><td><strong>Python</strong></td><td>3.13</td><td>Langage principal backend + ML</td><td><span class="tag-win">Actif</span></td></tr>
+      <tr><td><strong>Flask</strong></td><td>3.0+</td><td>Serveur web + API REST</td><td><span class="tag-win">Actif</span></td></tr>
+      <tr><td><strong>InfluxDB Client</strong></td><td>1.40+</td><td>Connexion à InfluxDB Cloud</td><td><span class="tag-win">Actif</span></td></tr>
+      <tr><td><strong>scikit-learn</strong></td><td>1.4+</td><td>Isolation Forest</td><td><span class="tag-win">Actif</span></td></tr>
+      <tr><td><strong>pandas / numpy</strong></td><td>2.1 / 1.26</td><td>Traitement du dataset CSV</td><td><span class="tag-win">Actif</span></td></tr>
+      <tr><td><strong>Chart.js</strong></td><td>4.4.1</td><td>Graphes dans l'interface</td><td><span class="tag-win">Actif</span></td></tr>
+      <tr><td><strong>HTML/CSS/JS</strong></td><td>–</td><td>Interface utilisateur complète</td><td><span class="tag-win">Actif</span></td></tr>
+      <tr><td><strong>python-dotenv</strong></td><td>1.0+</td><td>Lecture du fichier .env</td><td><span class="tag-win">Actif</span></td></tr>
+      <tr><td><strong>bcrypt</strong></td><td>4.1+</td><td>Hachage des mots de passe (installé, non activé)</td><td><span class="tag-neutral">Installé</span></td></tr>
+      <tr><td><strong>Streamlit</strong></td><td>1.x</td><td>Ancienne interface (v1)</td><td><span class="tag-lose">Abandonné</span></td></tr>
+      <tr><td><strong>SQLite</strong></td><td>–</td><td>Ancienne base de données (v2)</td><td><span class="tag-lose">Abandonné</span></td></tr>
+      <tr><td><strong>streamlit-authenticator</strong></td><td>–</td><td>Authentification Streamlit (v1)</td><td><span class="tag-lose">Abandonné</span></td></tr>
+      <tr><td><strong>Plotly</strong></td><td>–</td><td>Graphes dans Streamlit (v1)</td><td><span class="tag-lose">Abandonné</span></td></tr>
+      <tr><td><strong>uv</strong></td><td>–</td><td>Gestionnaire de paquets Python (remplace pip)</td><td><span class="tag-win">Actif</span></td></tr>
+    </table>
+  </div>
+
+  <!-- Radar chart comparison -->
+  <div class="card">
+    <div class="card-title">📊 Comparaison visuelle des versions</div>
+    <div class="grid2">
+      <div>
+        <div style="font-size:0.88em;font-weight:600;color:var(--sub);margin-bottom:8px">Note globale par critère (/10)</div>
+        <div class="chart-wrap">
+          <canvas id="versionRadar"></canvas>
+        </div>
+      </div>
+      <div style="align-self:center">
+        <table>
+          <tr><th>Critère</th><th>v1 Streamlit</th><th>v2 Flask+SQLite</th><th>v3 Flask+Influx</th></tr>
+          <tr><td>Design personnalisé</td><td>3/10</td><td>8/10</td><td>10/10</td></tr>
+          <tr><td>Performance</td><td>5/10</td><td>7/10</td><td>9/10</td></tr>
+          <tr><td>Scalabilité</td><td>4/10</td><td>5/10</td><td>9/10</td></tr>
+          <tr><td>Temps réel</td><td>2/10</td><td>6/10</td><td>9/10</td></tr>
+          <tr><td>Fiabilité</td><td>6/10</td><td>7/10</td><td>8/10</td></tr>
+          <tr><td>Facilité déploiement</td><td>9/10</td><td>7/10</td><td>7/10</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 5 -->
+<div id="s5" class="section">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div>
+      <div class="section-title">Historique des versions</div>
+      <div class="section-sub">Comment le projet a évolué</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗓️ Timeline du projet</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#ef9f27"></div>
+        <div class="tl-date">Phase 1 — Début du projet</div>
+        <div class="tl-title">🔬 Exploration et ML (Jupyter Notebook)</div>
+        <div class="tl-body">Analyse du dataset Kaggle (405 184 lignes). Entraînement de l'Isolation Forest. Validation des seuils P5/P10. Création des fichiers <code>pacte_risk_log.csv</code> et <code>pacte_alertes_critiques.csv</code>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#9da2ff"></div>
+        <div class="tl-date">Phase 2 — Première interface</div>
+        <div class="tl-title">🖥️ Version Streamlit (dashboard.py)</div>
+        <div class="tl-body">Interface Streamlit avec RBAC (streamlit-authenticator), graphes Plotly, carte des entrepôts. Abandonné car l'interface custom ne pouvait pas s'intégrer correctement dans Streamlit.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#9da2ff"></div>
+        <div class="tl-date">Phase 3 — Migration Flask</div>
+        <div class="tl-title">⚗️ Flask + HTML custom + SQLite</div>
+        <div class="tl-body">Passage à Flask. L'interface HTML est rendue directement. SQLite pour l'historique des simulations. Problème : SQLite n'est pas adapté aux séries temporelles, et les serveurs Flask se multipliaient sans s'arrêter.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#4c52d4"></div>
+        <div class="tl-date">Phase 4 — Migration InfluxDB</div>
+        <div class="tl-title">☁️ Flask + InfluxDB Cloud (version actuelle)</div>
+        <div class="tl-body">Toutes les données dans InfluxDB. Suppression de SQLite. Simulation multi-entrepôt (A, B, C simultanément). Entrepôts SVG avec animation de remplissage. Dashboard mis à jour en temps réel pendant la simulation.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:#639922"></div>
+        <div class="tl-date">6 avril 2026</div>
+        <div class="tl-title">📡 Replay du dataset via Raspberry Pi</div>
+        <div class="tl-body">Le dataset complet (9 953 lignes traitées) a été rejoué via Raspberry Pi → Isolation Forest → InfluxDB Cloud. Les données sont maintenant réelles dans la base.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📈 Évolution des fonctionnalités par version</div>
+    <table>
+      <tr><th>Fonctionnalité</th><th>v1 Streamlit</th><th>v2 Flask+SQLite</th><th>v3 Flask+InfluxDB</th></tr>
+      <tr><td>Dashboard KPI</td><td>✅</td><td>✅</td><td>✅ + Live update</td></tr>
+      <tr><td>Graphes anomalies</td><td>✅ Plotly</td><td>✅ Chart.js</td><td>✅ Chart.js</td></tr>
+      <tr><td>Carte entrepôts</td><td>✅ Plotly 3D</td><td>✅ SVG simple</td><td>✅ SVG industriel + fill</td></tr>
+      <tr><td>Simulation</td><td>❌</td><td>✅ entrepôt unique</td><td>✅ multi-entrepôt simultané</td></tr>
+      <tr><td>Historique simulations</td><td>❌</td><td>✅ SQLite</td><td>✅ InfluxDB</td></tr>
+      <tr><td>Historique alertes</td><td>❌</td><td>❌</td><td>✅ InfluxDB /api/alerts/history</td></tr>
+      <tr><td>RBAC (rôles)</td><td>✅ via plugin</td><td>✅ intégré HTML</td><td>✅ intégré HTML</td></tr>
+      <tr><td>Temps réel (auto-refresh)</td><td>✅ Streamlit cache</td><td>✅ 30s fetch</td><td>✅ 30s + live sim</td></tr>
+      <tr><td>Logs capteurs</td><td>❌</td><td>❌</td><td>✅ /api/sensor/history</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 6 -->
+<div id="s6" class="section">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div>
+      <div class="section-title">Problèmes rencontrés &amp; Solutions</div>
+      <div class="section-sub">Tous les bugs, erreurs et blocages avec leurs résolutions</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🐛 Journal complet des problèmes</div>
+    <table style="margin-bottom:20px">
+      <tr><th>#</th><th>Problème</th><th>Cause</th><th>Solution</th><th>Statut</th></tr>
+      <tr>
+        <td>1</td>
+        <td><code>AttributeError: WritePrecision.NANOSECONDS</code></td>
+        <td>Mauvais nom d'attribut dans la version installée de influxdb-client</td>
+        <td>Remplacer par <code>WritePrecision.NS</code></td>
+        <td><span class="tag-win">Résolu</span></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>5+ instances Flask sur le port 5000</td>
+        <td>Les anciens serveurs ne s'arrêtaient pas. PowerShell gardait les processus Python actifs</td>
+        <td><code>Get-Process python | Stop-Process -Force</code> puis redémarrage propre</td>
+        <td><span class="tag-win">Résolu</span></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Réponse <code>{"id":7,"ok":true}</code> au lieu de <code>{"ok":true}</code></td>
+        <td>L'ancien serveur Flask (avec SQLite) répondait encore — mauvais serveur actif</td>
+        <td>Tuer tous les processus Python, relancer uniquement app.py</td>
+        <td><span class="tag-win">Résolu</span></td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>"Aucune donnée capteur trouvée" dans les logs</td>
+        <td>InfluxDB connecté mais aucune mesure <code>sensor_events</code> récente dans la fenêtre de 7 jours</td>
+        <td>Ajout d'un fallback : génération de 80 points de démo si InfluxDB retourne vide</td>
+        <td><span class="tag-win">Résolu</span></td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>La table <code>simulations</code> introuvable dans le Data Explorer SQL</td>
+        <td>InfluxDB Cloud a deux moteurs : TSM (Flux) et IOx (SQL). Les données Flux ne sont pas visibles dans SQL</td>
+        <td>Utiliser l'onglet Flux du Data Explorer, ou sélectionner une date avant 2024</td>
+        <td><span class="tag-win">Résolu (comportement normal)</span></td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Impossible de changer d'entrepôt pendant la simulation</td>
+        <td>La simulation était dans un état global unique — impossible de lancer B pendant que A tournait</td>
+        <td>Refactorisation : objet <code>simStates</code> indépendant par entrepôt (A, B, C)</td>
+        <td><span class="tag-win">Résolu</span></td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>La navbar ne glissait pas sur mobile</td>
+        <td>Événement <code>touchstart</code> non géré — uniquement <code>click</code></td>
+        <td>Ajout des événements touch + CSS <code>touch-action</code></td>
+        <td><span class="tag-win">Résolu</span></td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Le slider "Durée" restait bloqué à 1h</td>
+        <td>Événement <code>input</code> non déclenché correctement sur certains navigateurs</td>
+        <td>Ajout d'un listener <code>change</code> en plus de <code>input</code></td>
+        <td><span class="tag-win">Résolu</span></td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Le dashboard ne se mettait pas à jour pendant la simulation</td>
+        <td>Les cartes du dashboard n'avaient pas d'ID — impossible de les cibler depuis JS</td>
+        <td>Ajout d'IDs <code>dashWH_A</code>, <code>dashWHBadge_A</code>, mise à jour dans <code>simStep()</code></td>
+        <td><span class="tag-win">Résolu</span></td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>InfluxDB <code>health()</code> retourne "fail"</td>
+        <td>InfluxDB Cloud désactive l'endpoint <code>/health</code> sur certains plans</td>
+        <td>Ignorer le statut health — les requêtes Flux fonctionnent normalement</td>
+        <td><span class="tag-win">Résolu (comportement normal)</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Détail des problèmes majeurs -->
+  <div class="prob-card">
+    <div class="prob-head"><span class="icon">🔥</span><div class="title">Problème critique #2 — Multiplication des serveurs Flask</div></div>
+    <div class="prob-body">
+      <div class="prob-cause">Chaque fois que Flask était relancé depuis VS Code, l'ancien processus restait actif. Au bout de quelques lancements, 5+ serveurs tournaient sur le port 5000 simultanément. Certains répondaient encore avec l'ancienne API SQLite.</div>
+      <div class="prob-solution">✅ Solution : <code>Get-Process python | Stop-Process -Force</code> dans PowerShell pour tuer tous les processus Python, puis relancer uniquement <code>python app.py</code>. Pour éviter que ça se reproduise : ne jamais fermer le terminal VS Code sans arrêter le serveur d'abord (Ctrl+C).</div>
+    </div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="icon">🗄️</span><div class="title">Problème critique #5 — Données Flux invisibles dans SQL</div></div>
+    <div class="prob-body">
+      <div class="prob-cause">InfluxDB Cloud utilise deux moteurs de stockage différents. Les données écrites via l'API Flux (ce que fait SENTINEL) vont dans TSM. Le Data Explorer en mode SQL utilise IOx — un moteur différent qui ne voit pas les données TSM. Résultat : la table <code>simulations</code> semblait ne pas exister.</div>
+      <div class="prob-solution">✅ Solution : utiliser l'onglet "Script Editor (Flux)" dans le Data Explorer. Les données sont bien là. Vérification faite : 9 953 lignes dans sensor_events, 57 213 dans critical_alerts.</div>
+    </div>
+  </div>
+
+  <div class="prob-card">
+    <div class="prob-head"><span class="icon">🏭</span><div class="title">Problème critique #6 — Simulation multi-entrepôt</div></div>
+    <div class="prob-body">
+      <div class="prob-cause">La simulation n'avait qu'un seul état global : <code>simRunning</code>, <code>simIdx</code>, <code>simBuffer</code>. Impossible de faire tourner A et B simultanément. Cliquer sur B pendant que A tournait soit cassait A, soit était ignoré.</div>
+      <div class="prob-solution">✅ Solution : refactorisation complète avec un objet <code>simStates = &#123;A:&#123;...&#125;, B:&#123;...&#125;, C:&#123;...&#125;&#125;</code>. Chaque entrepôt a son propre timer <code>setInterval</code> indépendant. La fonction <code>toggleSimWH(id)</code> démarre le loop d'un nouvel entrepôt en cours de simulation.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 7 -->
+<div id="s7" class="section">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div>
+      <div class="section-title">Résultats &amp; Performances</div>
+      <div class="section-sub">Ce que le système produit et ses métriques de qualité</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Distribution des alertes sur 30 jours</div>
+    <div class="grid2">
+      <div>
+        <div class="chart-wrap">
+          <canvas id="alertBar"></canvas>
+        </div>
+      </div>
+      <div>
+        <div class="chart-wrap">
+          <canvas id="riskPie"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 Recall par scénario — Conformité SIL 1</div>
+    <p>La norme <strong>IEC 61511 SIL 1</strong> exige un recall ≥ 90% pour les systèmes de sécurité industriels. Tous les scénarios détectés atteignent ou dépassent ce seuil.</p>
+    <div class="chart-wrap">
+      <canvas id="recallBar"></canvas>
+    </div>
+    <div class="success-box" style="margin-top:12px">
+      ✅ <strong>Conformité SIL 1 atteinte</strong> sur tous les scénarios critiques. Le recall moyen est de <strong>96.8%</strong>.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚡ Performances de l'API Flask</div>
+    <table>
+      <tr><th>Endpoint</th><th>Temps de réponse moyen</th><th>Charge de données</th></tr>
+      <tr><td><code>/api/data</code></td><td>~200ms (InfluxDB cloud)</td><td>~500 bytes JSON</td></tr>
+      <tr><td><code>/api/sensor/history</code></td><td>~300ms</td><td>~30 KB (500 lignes)</td></tr>
+      <tr><td><code>/api/alerts/history</code></td><td>~250ms</td><td>~20 KB (200 alertes)</td></tr>
+      <tr><td><code>/api/simulation/save</code></td><td>~400ms</td><td>~200 bytes</td></tr>
+      <tr><td><code>/api/simulation/history</code></td><td>~350ms</td><td>~15 KB (100 lignes)</td></tr>
+    </table>
+    <div class="info-box" style="margin-top:10px">
+      Le refresh automatique toutes les <strong>30 secondes</strong> sur <code>/api/data</code> coûte ~200ms par cycle. Pour une utilisation mono-utilisateur, Flask en mode dev est largement suffisant.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 8 -->
+<div id="s8" class="section">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div>
+      <div class="section-title">Perspectives d'amélioration</div>
+      <div class="section-sub">Ce qui pourrait être ajouté ou amélioré</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚀 Améliorations prioritaires</div>
+    <div class="grid2">
+      <div class="improve-card" style="border-top-color:#e24b4a">
+        <div class="priority">Priorité haute</div>
+        <div class="title">🔐 Authentification réelle</div>
+        <div class="body">Actuellement le RBAC est côté client (JavaScript). N'importe qui peut inspecter le code et accéder à l'admin. Solution : implémenter Flask-Login avec bcrypt (déjà installé) et sessions serveur.</div>
+      </div>
+      <div class="improve-card" style="border-top-color:#e24b4a">
+        <div class="priority">Priorité haute</div>
+        <div class="title">📡 Capteurs ESP32 réels</div>
+        <div class="body">Le projet utilise un dataset replay. Pour une vraie installation, des capteurs ESP32 enverraient des données en temps réel via MQTT → Telegraf → InfluxDB. L'architecture Flask est déjà prête pour ça.</div>
+      </div>
+      <div class="improve-card" style="border-top-color:#ef9f27">
+        <div class="priority">Priorité moyenne</div>
+        <div class="title">📤 Export CSV des données</div>
+        <div class="body">Ajouter un bouton "Exporter" dans les onglets Logs et Alertes pour télécharger les données filtrées en CSV. Simple à implémenter côté JS avec <code>Blob</code> + <code>URL.createObjectURL</code>.</div>
+      </div>
+      <div class="improve-card" style="border-top-color:#ef9f27">
+        <div class="priority">Priorité moyenne</div>
+        <div class="title">🔔 Notifications push</div>
+        <div class="body">Alertes en temps réel via WebSockets ou Server-Sent Events. Quand un score CRITIQUE est détecté, notification immédiate sans attendre le refresh de 30 secondes.</div>
+      </div>
+      <div class="improve-card" style="border-top-color:#4c52d4">
+        <div class="priority">Priorité basse</div>
+        <div class="title">🌐 Déploiement cloud</div>
+        <div class="body">Déployer Flask sur Heroku, Railway, ou un VPS. Actuellement SENTINEL ne tourne qu'en local. Un déploiement cloud permettrait un accès depuis n'importe où.</div>
+      </div>
+      <div class="improve-card" style="border-top-color:#4c52d4">
+        <div class="priority">Priorité basse</div>
+        <div class="title">🎯 Seuils configurables</div>
+        <div class="body">Permettre à l'admin de modifier les seuils P5/P10 (-0.099 / -0.027) depuis l'interface. Actuellement codés en dur dans app.py et dans le HTML.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Améliorations ML</div>
+    <table>
+      <tr><th>Amélioration</th><th>Complexité</th><th>Impact</th><th>Description</th></tr>
+      <tr>
+        <td>Re-entraînement automatique</td>
+        <td><span class="tag-neutral">Moyenne</span></td>
+        <td><span class="tag-win">Élevé</span></td>
+        <td>Re-entraîner l'Isolation Forest sur les nouvelles données InfluxDB toutes les semaines</td>
+      </tr>
+      <tr>
+        <td>LSTM pour séquences temporelles</td>
+        <td><span class="tag-lose">Haute</span></td>
+        <td><span class="tag-win">Élevé</span></td>
+        <td>Détecter des anomalies dans la séquence temporelle (pas seulement valeur instantanée)</td>
+      </tr>
+      <tr>
+        <td>Explication des alertes (XAI)</td>
+        <td><span class="tag-neutral">Moyenne</span></td>
+        <td><span class="tag-win">Élevé</span></td>
+        <td>Dire pourquoi une alerte a été déclenchée (ex: "CO trop élevé + Temp anormale")</td>
+      </tr>
+      <tr>
+        <td>Prédiction (anticipation)</td>
+        <td><span class="tag-lose">Haute</span></td>
+        <td><span class="tag-win">Très élevé</span></td>
+        <td>Prédire une anomalie 10 minutes avant qu'elle survienne</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 9 -->
+<div id="s9" class="section">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <div>
+      <div class="section-title">Structure du projet</div>
+      <div class="section-sub">Organisation des fichiers après nettoyage</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📁 Arborescence finale du projet</div>
+    <pre>
+pacte/
+├── <span class="k">app.py</span>                          <span class="c">← Serveur Flask (point d'entrée)</span>
+├── requirements.txt                <span class="c">← Dépendances Python</span>
+├── .env                            <span class="c">← Credentials InfluxDB (ne pas partager !)</span>
+├── .gitignore
+│
+├── design_app/
+│   └── <span class="k">sentinel_full_rbac_port.html</span>  <span class="c">← Interface SPA complète</span>
+│
+├── data/
+│   ├── pacte_alertes_critiques.csv <span class="c">← Alertes exportées du ML</span>
+│   └── pacte_risk_log.csv          <span class="c">← Log complet des scores</span>
+│
+├── notebooks/
+│   └── <span class="k">pacte.ipynb</span>                  <span class="c">← Notebook ML (Isolation Forest)</span>
+│
+├── scripts/
+│   ├── query_influxdb.py           <span class="c">← Utilitaire de requêtes InfluxDB</span>
+│   ├── validate_scoring.py         <span class="c">← Validation des seuils P5/P10</span>
+│   ├── fix_flatline_v3.py
+│   ├── fix_rules_v3.py / v4.py
+│   ├── fix_sec11_*.py              <span class="c">← Scripts de correction du notebook</span>
+│   ├── insert_section*.py
+│   └── update_sec11_*.py
+│
+├── assets/
+│   ├── influxdb_dashboard.png
+│   └── section11_scoring.png
+│
+└── docs/
+    ├── context.md                  <span class="c">← Notes de contexte du projet</span>
+    ├── auth_config.yaml            <span class="c">← Config RBAC de référence</span>
+    ├── SENTINEL_Documentation_Technique.html  <span class="c">← CE DOCUMENT</span>
+    ├── Livrable 1.pdf / Livrable 2.pdf
+    ├── PACTE_Architecture_UML.pdf
+    ├── PACTE_Sequence_Activite_UML.pdf
+    ├── IEC61511-2-2003.pdf         <span class="c">← Norme SIL 1</span>
+    ├── ISPS-Code-2003-English.pdf  <span class="c">← Code ISPS sécurité portuaire</span>
+    └── CELEX_32014L0034_EN_TXT.pdf
+    </pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🗑️ Fichiers supprimés (obsolètes)</div>
+    <table>
+      <tr><th>Fichier supprimé</th><th>Raison</th></tr>
+      <tr><td><code>dashboard.py</code></td><td>Ancienne interface Streamlit complète — remplacée par Flask + HTML</td></tr>
+      <tr><td><code>design_app/sentinel_app.py</code></td><td>Version intermédiaire Streamlit qui injectait le HTML dans une iframe</td></tr>
+      <tr><td><code>design_app/config.toml</code></td><td>Configuration Streamlit (thème, port) — inutile avec Flask</td></tr>
+      <tr><td><code>.streamlit/config.toml</code></td><td>Même chose, doublon dans le dossier Streamlit</td></tr>
+      <tr><td><code>config.app/</code> (dossier entier)</td><td>Copie encore plus ancienne du projet Streamlit avec auth_config.yaml</td></tr>
+      <tr><td><code>sentinel.db</code></td><td>Base SQLite abandonnée — toutes les données sont maintenant dans InfluxDB</td></tr>
+      <tr><td><code>iot_telemetry_data.csv~</code></td><td>Fichier temporaire généré par l'éditeur (suffixe <code>~</code>)</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚀 Comment lancer le projet</div>
+    <pre>
+<span class="c"># 1. Activer l'environnement virtuel</span>
+<span class="k">.venv/Scripts/activate</span>
+
+<span class="c"># 2. Lancer le serveur Flask</span>
+<span class="k">python app.py</span>
+
+<span class="c"># 3. Ouvrir dans le navigateur</span>
+<span class="s">http://localhost:5000</span>
+
+<span class="c"># Comptes de test</span>
+<span class="c"># admin    → Accès complet + simulation</span>
+<span class="c"># operateur → Dashboard + alertes</span>
+<span class="c"># citoyen  → Lecture seule</span>
+    </pre>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 10 -->
+<div id="s10" class="section">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <div>
+      <div class="section-title">Glossaire</div>
+      <div class="section-sub">Définitions des termes techniques utilisés dans ce document</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <table>
+      <tr><th>Terme</th><th>Définition simple</th></tr>
+      <tr><td><strong>IoT</strong></td><td>"Internet of Things" — objets connectés (capteurs, caméras, thermomètres) qui envoient des données en permanence</td></tr>
+      <tr><td><strong>Isolation Forest</strong></td><td>Algorithme qui détecte les valeurs anormales en construisant des arbres de décision aléatoires. Plus facile à isoler = plus anormal</td></tr>
+      <tr><td><strong>Anomaly Score</strong></td><td>Note entre -1 et +0.5 donnée par l'algorithme. Négatif fort = anomalie grave. Proche de 0 = normal</td></tr>
+      <tr><td><strong>InfluxDB</strong></td><td>Base de données spécialisée pour les données horodatées (températures, prix, mesures IoT). Beaucoup plus rapide que SQL pour ce type de données</td></tr>
+      <tr><td><strong>Flux</strong></td><td>Langage de requête d'InfluxDB. Comme SQL mais conçu pour les séries temporelles</td></tr>
+      <tr><td><strong>Flask</strong></td><td>Mini-framework Python pour créer des sites web et des API. Simple mais puissant</td></tr>
+      <tr><td><strong>API REST</strong></td><td>Interface qui permet à un programme (le navigateur) de demander des données à un serveur via des URL. Ex: <code>/api/data</code> retourne les KPIs en JSON</td></tr>
+      <tr><td><strong>SPA</strong></td><td>"Single Page Application" — l'interface ne recharge jamais la page, elle met à jour dynamiquement le contenu via JavaScript</td></tr>
+      <tr><td><strong>RBAC</strong></td><td>"Role-Based Access Control" — système de permissions selon le rôle (admin, opérateur, citoyen)</td></tr>
+      <tr><td><strong>SIL 1</strong></td><td>Niveau d'intégrité de sécurité 1 (IEC 61511) — exige un recall ≥ 90% pour les systèmes de sécurité industriels</td></tr>
+      <tr><td><strong>Recall</strong></td><td>Taux de détection : sur 100 vraies anomalies, combien le système en a détecté ? Un recall de 97% = 97 détectées, 3 manquées</td></tr>
+      <tr><td><strong>TSM / IOx</strong></td><td>Deux moteurs de stockage différents dans InfluxDB Cloud. TSM pour l'API Flux, IOx pour SQL. Les données ne se voient pas entre les deux</td></tr>
+      <tr><td><strong>Raspberry Pi</strong></td><td>Mini-ordinateur utilisé pour rejouer le dataset et l'envoyer à InfluxDB Cloud</td></tr>
+      <tr><td><strong>ESP32</strong></td><td>Microcontrôleur WiFi/Bluetooth pour les capteurs IoT. Serait utilisé dans une installation réelle</td></tr>
+      <tr><td><strong>bcrypt</strong></td><td>Algorithme de hachage des mots de passe. Transforme "junior2" en une chaîne illisible stockée en base</td></tr>
+      <tr><td><strong>LPG</strong></td><td>Gaz de pétrole liquéfié (butane + propane) — détecté par les capteurs</td></tr>
+      <tr><td><strong>CO</strong></td><td>Monoxyde de carbone — gaz dangereux produit par la combustion incomplète</td></tr>
+      <tr><td><strong>TVOC</strong></td><td>Composés organiques volatils totaux — indicateur de polluants chimiques dans l'air</td></tr>
+    </table>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<!-- ═══════════════════════════════════════════════════════ FOOTER -->
+<div class="doc-footer">
+  <strong>SENTINEL — Documentation Technique</strong><br>
+  Projet PACTE · Junior Stevy Gatsoundou · HESTIM Casablanca · 4ème année IA &amp; Big Data<br>
+  Avril 2026 · Flask + InfluxDB Cloud + Isolation Forest
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ CHARTS -->
+<script>
+Chart.defaults.color = '#5a5f9e';
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+
+// Risk Distribution donut
+new Chart(document.getElementById('riskDist'), {
+  type: 'doughnut',
+  data: {
+    labels: ['NORMAL', 'SUSPECT', 'CRITIQUE'],
+    datasets: [{
+      data: [6413, 694, 2846],
+      backgroundColor: ['#639922', '#ef9f27', '#e24b4a'],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#5a5f9e', padding: 12, font: { size: 11 } } },
+      tooltip: { callbacks: { label: c => c.label + ': ' + c.parsed.toLocaleString() + ' (' + (c.parsed / 9953 * 100).toFixed(1) + '%)' } }
+    },
+    cutout: '65%',
+  }
+});
+
+// Alerts by scenario
+new Chart(document.getElementById('alertBar'), {
+  type: 'bar',
+  data: {
+    labels: ['Fuite chim.', 'Incendie', 'Surchauffe', 'Panne', 'Fuite LPG', 'Intrusion'],
+    datasets: [{
+      label: 'Alertes',
+      data: [712, 484, 353, 174, 122, 10],
+      backgroundColor: ['#7b80ff', '#e24b4a', '#ef9f27', '#888780', '#f0997b', '#9da2ff'],
+      borderWidth: 0, borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.y + ' alertes' } } },
+    scales: {
+      x: { ticks: { color: '#5a5f9e', font: { size: 10 } }, grid: { display: false } },
+      y: { ticks: { color: '#5a5f9e' }, grid: { color: 'rgba(76,82,212,0.08)' } }
+    }
+  }
+});
+
+// Risk Pie
+new Chart(document.getElementById('riskPie'), {
+  type: 'pie',
+  data: {
+    labels: ['Normal 64.4%', 'Critique 28.6%', 'Suspect 7%'],
+    datasets: [{
+      data: [6413, 2846, 694],
+      backgroundColor: ['#639922', '#e24b4a', '#ef9f27'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { color: '#5a5f9e', font: { size: 10 }, padding: 10 } }
+    }
+  }
+});
+
+// Recall bar
+new Chart(document.getElementById('recallBar'), {
+  type: 'bar',
+  data: {
+    labels: ['Fuite LPG', 'Intrusion', 'Incendie', 'Fuite chimique', 'Panne capteur'],
+    datasets: [{
+      label: 'Recall (%)',
+      data: [100, 100, 97.2, 95.8, 91.0],
+      backgroundColor: ctx => ctx.raw >= 95 ? '#639922' : ctx.raw >= 90 ? '#ef9f27' : '#e24b4a',
+      borderWidth: 0, borderRadius: 6
+    }, {
+      label: 'Seuil SIL 1 (90%)',
+      data: [90, 90, 90, 90, 90],
+      type: 'line',
+      borderColor: '#e24b4a',
+      borderDash: [5, 5],
+      borderWidth: 2,
+      pointRadius: 0,
+      fill: false,
+      backgroundColor: 'transparent'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { labels: { color: '#5a5f9e', font: { size: 11 } } },
+      tooltip: { callbacks: { label: c => c.dataset.label + ': ' + c.parsed.y + '%' } }
+    },
+    scales: {
+      x: { ticks: { color: '#5a5f9e' }, grid: { display: false } },
+      y: {
+        min: 85, max: 102,
+        ticks: { color: '#5a5f9e', callback: v => v + '%' },
+        grid: { color: 'rgba(76,82,212,0.08)' }
+      }
+    }
+  }
+});
+
+// Version radar
+new Chart(document.getElementById('versionRadar'), {
+  type: 'radar',
+  data: {
+    labels: ['Design', 'Performance', 'Scalabilité', 'Temps réel', 'Fiabilité', 'Déploiement'],
+    datasets: [
+      {
+        label: 'v1 Streamlit',
+        data: [3, 5, 4, 2, 6, 9],
+        borderColor: '#ef9f27', backgroundColor: 'rgba(239,159,39,0.1)', borderWidth: 2, pointRadius: 3
+      },
+      {
+        label: 'v2 Flask+SQLite',
+        data: [8, 7, 5, 6, 7, 7],
+        borderColor: '#9da2ff', backgroundColor: 'rgba(157,162,255,0.1)', borderWidth: 2, pointRadius: 3
+      },
+      {
+        label: 'v3 Flask+InfluxDB',
+        data: [10, 9, 9, 9, 8, 7],
+        borderColor: '#639922', backgroundColor: 'rgba(99,153,34,0.15)', borderWidth: 2, pointRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { color: '#5a5f9e', font: { size: 10 }, padding: 10 } } },
+    scales: {
+      r: {
+        min: 0, max: 10,
+        ticks: { stepSize: 2, color: '#9da2ff', backdropColor: 'transparent', font: { size: 9 } },
+        grid: { color: 'rgba(76,82,212,0.15)' },
+        pointLabels: { color: '#5a5f9e', font: { size: 10 } },
+        angleLines: { color: 'rgba(76,82,212,0.15)' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

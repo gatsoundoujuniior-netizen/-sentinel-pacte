@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SENTINEL</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
+html,body{background:#0d0d1c;height:100%}
+.app{background:#0d0d1c;color:#dde0ff;min-height:100vh}
+.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:32px}
+.login-card{background:#13132a;border:0.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:32px;width:340px}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.brand-icon{width:36px;height:36px;background:#4c52d4;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white}
+.brand-name{font-size:16px;font-weight:500;color:white}
+.brand-sub{font-size:10px;color:#4c4f7a}
+.role-btns{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.role-btn{padding:11px 16px;border-radius:9px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#9da2ff;font-size:12px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all .15s}
+.role-btn:hover{background:rgba(76,82,212,0.2);border-color:#4c52d4;color:white}
+.role-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dash-layout{display:grid;grid-template-columns:190px 1fr;min-height:100vh}
+.sidebar{background:#0f0f20;border-right:0.5px solid rgba(255,255,255,0.06);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-top{padding:14px 14px 10px;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.sb-brand{display:flex;align-items:center;gap:9px}
+.sb-icon{width:26px;height:26px;background:#4c52d4;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0}
+.sb-title{font-size:12px;font-weight:500;color:white}
+.sb-sub2{font-size:9px;color:#3a3d6b}
+.nav-sec{padding:10px 10px 4px;font-size:8px;font-weight:500;color:#2e3160;text-transform:uppercase;letter-spacing:.1em}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;margin:1px 6px;border-radius:7px;font-size:11px;color:#6b6fa8;cursor:pointer;transition:all .15s}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:#c5c9ff}
+.nav-item.active{background:#4c52d4;color:white}
+.nav-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sb-user{margin-top:auto;padding:10px 12px;border-top:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px}
+.sb-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.sb-uname{font-size:11px;font-weight:500;color:#c5c9ff}
+.sb-role-lbl{font-size:9px;color:#3a3d6b}
+.logout-btn{margin-left:auto;font-size:9px;color:#3a3d6b;cursor:pointer;padding:3px 6px;border-radius:4px;border:0.5px solid #2e3160;background:none}
+.logout-btn:hover{color:#e24b4a;border-color:#e24b4a}
+.content{padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.page-head{display:flex;align-items:center;justify-content:space-between}
+.page-title{font-size:14px;font-weight:500;color:white}
+.page-sub{font-size:10px;color:#3a3d6b;margin-top:1px}
+.kpi-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.kpi{background:#1a1a30;border:0.5px solid rgba(255,255,255,0.07);border-radius:9px;padding:10px 12px}
+.kpi-l{font-size:8px;color:#3a3d6b;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px}
+.kpi-v{font-size:18px;font-weight:500;line-height:1}
+.kpi-s{font-size:9px;margin-top:2px}
+.card{background:#1a1a30;border:0.5px solid rgba(255,255,255,0.07);border-radius:9px;padding:12px}
+.card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.card-t{font-size:11px;color:#9da2ff;font-weight:500}
+.badge{font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.wh-card{border-radius:9px;border:1.5px solid;padding:12px;cursor:pointer;transition:all .2s;position:relative}
+.wh-card:hover{transform:translateY(-1px)}
+.wh-name{font-size:12px;font-weight:500;margin-bottom:4px}
+.wh-addr{font-size:9px;opacity:.6;margin-bottom:8px}
+.wh-meters{display:flex;flex-direction:column;gap:4px}
+.meter-row{display:flex;align-items:center;gap:6px}
+.meter-lbl{font-size:9px;width:38px;opacity:.7;flex-shrink:0}
+.meter-bar{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.07);overflow:hidden}
+.meter-fill{height:100%;border-radius:2px;transition:width .4s ease}
+.meter-val{font-size:9px;width:30px;text-align:right;opacity:.8;flex-shrink:0}
+.wh-status{font-size:9px;font-weight:500;margin-top:8px;padding:3px 8px;border-radius:6px;display:inline-block}
+.sim-panel{display:grid;grid-template-columns:180px 1fr;gap:10px}
+.sim-ctrl{background:#1a1a30;border:0.5px solid rgba(255,255,255,0.07);border-radius:9px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.sl-wrap{display:flex;flex-direction:column;gap:3px}
+.sl-head{display:flex;justify-content:space-between}
+.sl-lbl{font-size:9px;color:#4c4f7a}
+.sl-v{font-size:10px;color:#9da2ff;font-weight:500}
+.inject-btn{padding:8px;background:#4c52d4;color:white;border:none;border-radius:7px;font-size:11px;font-weight:500;cursor:pointer;transition:all .15s}
+.inject-btn:hover{background:#5c62e4}
+.inject-btn:disabled{background:#2a2d5e;color:#3a3d6b;cursor:not-allowed}
+.stop-btn{padding:6px;background:none;color:#e24b4a;border:0.5px solid #e24b4a;border-radius:7px;font-size:10px;cursor:pointer}
+.sc-select,.wh-select{width:100%;padding:6px 8px;background:#0f0f20;border:0.5px solid rgba(255,255,255,0.1);border-radius:6px;color:#9da2ff;font-size:10px}
+.sensor-mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.sensor-mini{background:#0f0f20;border:0.5px solid rgba(255,255,255,0.06);border-radius:7px;padding:8px}
+.sm-lbl{font-size:8px;color:#3a3d6b;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.sm-val{font-size:14px;font-weight:500;color:white;line-height:1}
+.sm-unit{font-size:8px;color:#3a3d6b}
+.sm-bar{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;margin-top:5px;overflow:hidden}
+.sm-fill{height:100%;border-radius:2px;transition:width .3s}
+.alert-strip{border-radius:7px;padding:8px 12px;font-size:10px;font-weight:500;border:0.5px solid}
+.users-table{width:100%;border-collapse:collapse;font-size:11px}
+.users-table th{font-size:9px;color:#3a3d6b;text-transform:uppercase;letter-spacing:.07em;padding:6px 8px;border-bottom:0.5px solid rgba(255,255,255,0.06);text-align:left}
+.users-table td{padding:8px;border-bottom:0.5px solid rgba(255,255,255,0.04);color:#9da2ff}
+.hist-table{width:100%;border-collapse:collapse;font-size:10px}
+.hist-table th{font-size:8px;color:#3a3d6b;text-transform:uppercase;letter-spacing:.06em;padding:5px 8px;border-bottom:0.5px solid rgba(255,255,255,0.06);text-align:left;white-space:nowrap}
+.hist-table td{padding:6px 8px;border-bottom:0.5px solid rgba(255,255,255,0.04);color:#9da2ff;white-space:nowrap}
+.toggle{width:32px;height:18px;border-radius:9px;border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:#4c52d4}.toggle.off{background:#2a2d5e}
+.toggle::after{content:'';position:absolute;top:3px;width:12px;height:12px;border-radius:50%;background:white;transition:left .2s}
+.toggle.on::after{left:17px}.toggle.off::after{left:3px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#e24b4a;display:inline-block;margin-right:4px;animation:blink 1.2s infinite}
+.sim-running-indicator{display:inline-flex;align-items:center;gap:4px;font-size:9px;color:#e24b4a;padding:2px 8px;border-radius:8px;background:rgba(226,75,74,0.12);border:0.5px solid rgba(226,75,74,0.3)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+input[type=range]{width:100%;accent-color:#4c52d4;cursor:pointer}
+.tab-bar{display:flex;gap:4px;border-bottom:0.5px solid rgba(255,255,255,0.06);margin-bottom:10px}
+.tab-btn{padding:6px 12px;font-size:10px;color:#6b6fa8;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s}
+.tab-btn.active{color:#9da2ff;border-bottom-color:#4c52d4}
+.tab-btn:hover{color:#c5c9ff}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-icon">S</div>
+      <div><div class="brand-name">SENTINEL</div><div class="brand-sub">Surveillance portuaire IoT · Zone Casablanca</div></div>
+    </div>
+    <div style="font-size:10px;color:#3a3d6b;margin-bottom:12px">Choisir un profil de connexion :</div>
+    <div class="role-btns">
+      <button class="role-btn" onclick="login('admin')"><div class="role-dot" style="background:#e24b4a"></div><div><div style="font-weight:500;color:white">Administrateur</div><div style="font-size:9px;color:#4c4f7a;margin-top:1px">Accès complet · Gestion utilisateurs · Config système</div></div></button>
+      <button class="role-btn" onclick="login('operateur')"><div class="role-dot" style="background:#ef9f27"></div><div><div style="font-weight:500;color:white">Opérateur</div><div style="font-size:9px;color:#4c4f7a;margin-top:1px">Dashboard · Simulateur · Cartographie</div></div></button>
+      <button class="role-btn" onclick="login('public')"><div class="role-dot" style="background:#639922"></div><div><div style="font-weight:500;color:white">Public / Citoyen</div><div style="font-size:9px;color:#4c4f7a;margin-top:1px">Situation générale · Carte des risques</div></div></button>
+    </div>
+  </div>
+</div>
+<div class="dash-layout" id="dashLayout" style="display:none">
+  <div class="sidebar">
+    <div class="sb-top">
+      <div class="sb-brand"><div class="sb-icon">S</div><div><div class="sb-title">SENTINEL</div><div class="sb-sub2">Surveillance portuaire</div></div></div>
+    </div>
+    <div id="navMenu"></div>
+    <div class="sb-user">
+      <div class="sb-av" id="sbAv"></div>
+      <div><div class="sb-uname" id="sbName"></div><div class="sb-role-lbl" id="sbRoleLbl"></div></div>
+      <button class="logout-btn" onclick="logout()">Quitter</button>
+    </div>
+  </div>
+  <div class="content" id="mainContent"></div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════
+//  CONFIG ROLES & DONNÉES
+// ═══════════════════════════════════════════════════════
+const ROLES = {
+  admin:    {label:'Administrateur',color:'#e24b4a',av:'AD',avBg:'rgba(226,75,74,0.25)',avC:'#f09595',
+             nav:['Dashboard','Cartographie','Simulateur','Historique','Utilisateurs','Paramètres']},
+  operateur:{label:'Opérateur',color:'#ef9f27',av:'OP',avBg:'rgba(239,159,39,0.25)',avC:'#ef9f27',
+             nav:['Dashboard','Cartographie','Simulateur','Historique']},
+  public:   {label:'Citoyen',color:'#639922',av:'PB',avBg:'rgba(99,153,34,0.25)',avC:'#97c459',
+             nav:['Situation','Carte risques']},
+};
+
+const RISK_MAP = {
+  NORMAL:   {color:'#639922',border:'rgba(99,153,34,0.5)',bg:'rgba(99,153,34,0.07)'},
+  SUSPECT:  {color:'#ef9f27',border:'rgba(239,159,39,0.5)',bg:'rgba(239,159,39,0.07)'},
+  CRITIQUE: {color:'#e24b4a',border:'rgba(226,75,74,0.5)',bg:'rgba(226,75,74,0.07)'},
+};
+
+const WAREHOUSES_INIT = [
+  {id:'A',name:'Entrepôt A',addr:'Quai Nord — Zone chimique',
+   sensors:{co:12,lpg:5,temp:24,smoke:2,hum:48},risk:'NORMAL',...RISK_MAP.NORMAL},
+  {id:'B',name:'Entrepôt B',addr:'Quai Central — Zone carburant',
+   sensors:{co:45,lpg:120,temp:31,smoke:18,hum:52},risk:'SUSPECT',...RISK_MAP.SUSPECT},
+  {id:'C',name:'Entrepôt C',addr:'Quai Sud — Zone stockage général',
+   sensors:{co:8,lpg:3,temp:22,smoke:1,hum:44},risk:'NORMAL',...RISK_MAP.NORMAL},
+];
+
+const SC_CFG = {
+  incendie:   {co:0.8,lpg:0.1,temp:0.6,smoke:0.9,type:'prog',   recall:97.2,  label:'Incendie entrepôt'},
+  lpg:        {co:0.1,lpg:1.0,temp:0.05,smoke:0.0,type:'brutal',recall:100.0, label:'Fuite LPG soudaine'},
+  chimique:   {co:0.4,lpg:0.3,temp:0.0,smoke:0.1,type:'prog',   recall:95.8,  label:'Fuite chimique lente'},
+  surchauffe: {co:0.1,lpg:0.0,temp:1.0,smoke:0.2,type:'prog',   recall:94.7,  label:'Surchauffe progressive'},
+  intrusion:  {co:0.0,lpg:0.0,temp:0.0,smoke:0.0,type:'brutal', recall:100.0, label:'Intrusion nocturne'},
+};
+
+const USERS_LIST = [
+  {name:'Junior Gatsoundou',role:'admin',   email:'junior@pacte.ma',  active:true},
+  {name:'Karim Benali',     role:'operateur',email:'karim@port.ma',   active:true},
+  {name:'Sara Alaoui',      role:'operateur',email:'sara@port.ma',    active:false},
+  {name:'Mohamed Idrissi',  role:'public',  email:'m.idrissi@ville.ma',active:true},
+];
+
+// ═══════════════════════════════════════════════════════
+//  ÉTAT GLOBAL
+// ═══════════════════════════════════════════════════════
+let curRole=null, curPage=null;
+let whData = WAREHOUSES_INIT.map(w=>({...w,sensors:{...w.sensors}}));
+let lineChart=null;
+window.INFLUX_DATA = null;
+
+// Simulation — multi-entrepôt, persiste hors page
+let simWHs      = ['A'];   // entrepôts actifs (peut être ['A','B','C'])
+let simSC       = 'incendie';
+let simIntensity= 1.5;
+let simSpeed    = 1;
+let simFocus    = 'A';     // entrepôt affiché sur le graphe
+let simRunning  = false;   // true si au moins un entrepôt tourne
+let simStates   = {
+  A:{running:false,idx:0,timer:null,buffer:[],stats:{ptsCrit:0,ptsSusp:0,scoreMin:99,scoreMax:-99},start:null},
+  B:{running:false,idx:0,timer:null,buffer:[],stats:{ptsCrit:0,ptsSusp:0,scoreMin:99,scoreMax:-99},start:null},
+  C:{running:false,idx:0,timer:null,buffer:[],stats:{ptsCrit:0,ptsSusp:0,scoreMin:99,scoreMax:-99},start:null},
+};
+
+function noise(s){return (Math.random()-0.5)*s*2}
+function rnd(n,d=2){return parseFloat(n.toFixed(d))}
+
+// ═══════════════════════════════════════════════════════
+//  FETCH DONNÉES INFLUXDB (silencieux, toutes les 30s)
+// ═══════════════════════════════════════════════════════
+async function fetchData(){
+  try{
+    const r = await fetch('/api/data');
+    if(!r.ok) return;
+    const d = await r.json();
+    window.INFLUX_DATA = d;
+    // Mettre à jour les risques des entrepôts depuis InfluxDB
+    if(d.wh_risk){
+      whData.forEach(w=>{
+        const r=d.wh_risk[w.id];
+        if(r&&RISK_MAP[r]){w.risk=r;Object.assign(w,RISK_MAP[r]);}
+      });
+    }
+  }catch(e){}
+}
+fetchData();
+setInterval(fetchData, 30000);
+
+// ═══════════════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════════════
+function login(role){
+  curRole=role; curPage=ROLES[role].nav[0];
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('dashLayout').style.display='grid';
+  const R=ROLES[role];
+  const av=document.getElementById('sbAv');
+  av.textContent=R.av; av.style.background=R.avBg; av.style.color=R.avC;
+  document.getElementById('sbName').textContent=role==='admin'?'Junior G.':role==='operateur'?'Karim B.':'Visiteur';
+  document.getElementById('sbRoleLbl').textContent=R.label;
+  buildNav(); renderPage();
+}
+
+function logout(){
+  if(simRunning){Object.values(simStates).forEach(s=>{s.running=false;clearTimeout(s.timer);});simRunning=false;}
+  if(lineChart){lineChart.destroy();lineChart=null;}
+  curRole=null; curPage=null;
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('dashLayout').style.display='none';
+}
+
+// ═══════════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════════
+function buildNav(){
+  const R=ROLES[curRole]; let h='';
+  R.nav.forEach(p=>{
+    const isActive=p===curPage;
+    const extra = p==='Simulateur'&&simRunning ? ' <span class="sim-running-indicator"><span class="live-dot" style="background:#ef9f27"></span>En cours</span>' : '';
+    h+=`<div class="nav-item${isActive?' active':''}" onclick="navTo('${p}')">
+      <div class="nav-dot" style="background:${isActive?'white':R.color+'66'}"></div>${p}${extra}</div>`;
+  });
+  document.getElementById('navMenu').innerHTML=`<div class="nav-sec">Menu</div>${h}`;
+}
+
+function navTo(p){
+  // NE PAS stopper la simulation quand on change de page
+  curPage=p; buildNav(); renderPage();
+}
+
+function renderPage(){
+  const c=document.getElementById('mainContent'); c.innerHTML='';
+  if(curPage==='Dashboard')        c.innerHTML=pageDashboard();
+  else if(curPage==='Cartographie')c.innerHTML=pageCartoHTML();
+  else if(curPage==='Simulateur')  c.innerHTML=pageSimHTML();
+  else if(curPage==='Utilisateurs')c.innerHTML=pageUsers();
+  else if(curPage==='Paramètres')  c.innerHTML=pageParams();
+  else if(curPage==='Situation')   c.innerHTML=pagePublic();
+  else if(curPage==='Carte risques')c.innerHTML=pageCarteRisques();
+  else if(curPage==='Historique')  { pageHistorique(); return; }
+  if(curPage==='Dashboard')  setTimeout(initDashChart,50);
+  if(curPage==='Simulateur') setTimeout(restoreSimPage,50);
+}
+
+// ═══════════════════════════════════════════════════════
+//  SIMULATION — INFINIE, PERSISTE HORS PAGE
+// ═══════════════════════════════════════════════════════
+function startSim(){
+  if(simRunning) return;
+  const scEl=document.getElementById('scSelect');
+  if(scEl) simSC=scEl.value;
+  const intEl=document.getElementById('slInt');
+  if(intEl) simIntensity=parseFloat(intEl.value)/10;
+  const spdEl=document.getElementById('slSpd');
+  if(spdEl) simSpeed=parseInt(spdEl.value)||1;
+
+  simRunning=true;
+  simFocus=simWHs[0];
+  simWHs.forEach(whId=>{
+    const s=simStates[whId];
+    s.running=true; s.idx=0; s.start=Date.now();
+    s.buffer=[]; s.stats={ptsCrit:0,ptsSusp:0,scoreMin:99,scoreMax:-99};
+  });
+
+  const btnInj=document.getElementById('btnInj');
+  if(btnInj) btnInj.disabled=true;
+  const btnStop=document.getElementById('btnStop');
+  if(btnStop) btnStop.style.display='block';
+  const st=document.getElementById('simStatus');
+  if(st){st.textContent='Injection active';st.style.color='#e24b4a';}
+
+  if(!lineChart) initSimChart();
+  buildNav();
+  simWHs.forEach(whId=>simStep(whId));
+}
+
+function stopSim(){
+  if(!simRunning) return;
+  simRunning=false;
+  Object.keys(simStates).forEach(whId=>{
+    const s=simStates[whId];
+    if(!s.running) return;
+    s.running=false; clearTimeout(s.timer);
+    if(s.idx===0) return;
+    const cfg=SC_CFG[simSC];
+    saveSim({
+      ts:           new Date().toISOString(),
+      entrepot:     whId,
+      scenario:     cfg.label,
+      intensite:    simIntensity,
+      duree_sec:    Math.round(s.start?(Date.now()-s.start)/1000:0),
+      pts_total:    s.idx,
+      pts_critique: s.stats.ptsCrit,
+      pts_suspect:  s.stats.ptsSusp,
+      score_min:    s.stats.scoreMin===99?0:s.stats.scoreMin,
+      score_max:    s.stats.scoreMax===-99?0:s.stats.scoreMax,
+      recall:       cfg.recall,
+    });
+  });
+  const btnInj=document.getElementById('btnInj');
+  if(btnInj) btnInj.disabled=false;
+  const btnStop=document.getElementById('btnStop');
+  if(btnStop) btnStop.style.display='none';
+  const st=document.getElementById('simStatus');
+  if(st){st.textContent='Arrêté';st.style.color='#ef9f27';}
+  buildNav();
+}
+
+async function saveSim(data){
+  try{
+    await fetch('/api/simulation/save',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    });
+  }catch(e){}
+}
+
+function simStep(whId){
+  const s=simStates[whId];
+  if(!s.running) return;
+
+  const intEl=document.getElementById('slInt');
+  if(intEl) simIntensity=parseFloat(intEl.value)/10;
+  const spdEl=document.getElementById('slSpd');
+  if(spdEl) simSpeed=parseInt(spdEl.value)||1;
+
+  const cfg=SC_CFG[simSC];
+  const phase=Math.min(1,s.idx/120);
+  const prog=cfg.type==='prog'?phase:(cfg.type==='brutal'&&s.idx>30?1:0);
+
+  const co   =Math.max(0,cfg.co   *simIntensity*prog*400+noise(20));
+  const lpg  =Math.max(0,cfg.lpg  *simIntensity*prog*600+noise(15));
+  const temp =Math.max(20,22+cfg.temp*simIntensity*prog*60+noise(2));
+  const smoke=Math.max(0,cfg.smoke*simIntensity*prog*100+noise(3));
+
+  let sc=0.18;
+  sc-=cfg.co   *simIntensity*prog*0.12;
+  sc-=cfg.lpg  *simIntensity*prog*0.18;
+  sc-=cfg.temp *simIntensity*prog*0.10;
+  sc-=cfg.smoke*simIntensity*prog*0.08;
+  sc+=noise(0.015);
+  sc=Math.max(-0.35,Math.min(0.32,parseFloat(sc.toFixed(3))));
+
+  const risk=sc<=-0.099?'CRITIQUE':(sc<=-0.027?'SUSPECT':'NORMAL');
+  if(risk==='CRITIQUE') s.stats.ptsCrit++;
+  if(risk==='SUSPECT')  s.stats.ptsSusp++;
+  if(sc<s.stats.scoreMin) s.stats.scoreMin=sc;
+  if(sc>s.stats.scoreMax) s.stats.scoreMax=sc;
+
+  const wIdx=whData.findIndex(w=>w.id===whId);
+  if(wIdx>=0){
+    whData[wIdx].sensors={co,lpg,temp,smoke,hum:whData[wIdx].sensors.hum};
+    whData[wIdx].risk=risk; Object.assign(whData[wIdx],RISK_MAP[risk]);
+  }
+
+  s.buffer.push({t:s.idx,sc,risk,co,lpg,temp,smoke});
+  if(s.buffer.length>500) s.buffer.shift();
+
+  const onSim=!!document.getElementById('simLine');
+  if(onSim){
+    const e=(id)=>document.getElementById(id);
+    const set=(id,v)=>{const el=e(id);if(el)el.textContent=v;};
+    const setW=(id,w)=>{const el=e(id);if(el)el.style.width=w+'%';};
+
+    // Mise à jour SVG carte (Cartographie)
+    if(document.getElementById('svgFill_'+whId)) updateSVGWarehouse(whId);
+    // Mise à jour cartes entrepôts dashboard
+    const dashCard=document.getElementById('dashWH_'+whId);
+    if(dashCard){
+      const rm=RISK_MAP[risk];
+      dashCard.style.borderColor=rm.border;
+      const badge=document.getElementById('dashWHBadge_'+whId);
+      if(badge){badge.textContent=risk;badge.style.background=rm.color+'22';badge.style.color=rm.color;}
+      const sens=document.getElementById('dashWHSensors_'+whId);
+      if(sens) sens.textContent=`CO: ${Math.round(co)} · LPG: ${Math.round(lpg)} · ${rnd(temp,1)}°C`;
+    }
+
+    // Mini-cards de tous les entrepôts actifs
+    simWHs.forEach(wid=>{
+      const card=e('whMini_'+wid);
+      if(!card) return;
+      const wh=whData.find(w=>w.id===wid); if(!wh) return;
+      const st=simStates[wid]; const lp=st.buffer[st.buffer.length-1];
+      const rm=RISK_MAP[wh.risk];
+      card.style.borderColor=rm.border; card.style.background=rm.bg;
+      card.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:10px;font-weight:500;color:${rm.color}">${wh.name}</span>
+        <span class="badge" style="background:${rm.color}22;color:${rm.color}">${wh.risk}</span></div>
+        <div style="font-size:9px;color:#3a3d6b;margin-top:3px">CO:${Math.round(wh.sensors.co)} · LPG:${Math.round(wh.sensors.lpg)} · ${rnd(wh.sensors.temp,1)}°C${lp?` · IF:<span style="color:${rm.color}"> ${lp.sc.toFixed(3)}</span>`:''}
+        </div>`;
+    });
+
+    // Sensors + chart : seulement pour l'entrepôt focalisé
+    if(whId===simFocus){
+      set('smCO',Math.round(co)); set('smLPG',Math.round(lpg));
+      set('smTMP',rnd(temp,1));   set('smSMK',Math.round(smoke));
+      set('smPTS',s.idx+1);       set('simPtsCount',s.idx+1);
+
+      const winEl=e('slWin');
+      const winSize=winEl?parseInt(winEl.value):80;
+      const ifEl=e('smIF');
+      if(ifEl){ifEl.textContent=sc.toFixed(3);ifEl.style.color=risk==='CRITIQUE'?'#e24b4a':risk==='SUSPECT'?'#ef9f27':'#97c459';}
+      setW('sbCO', Math.min(100,co/8));
+      setW('sbLPG',Math.min(100,lpg/6));
+      setW('sbTMP',Math.min(100,(temp-20)/60*100));
+      setW('sbSMK',Math.min(100,smoke));
+      setW('sbPTS',Math.min(100,s.idx/500*100));
+
+      const rBadge=e('rBadge');
+      if(rBadge){
+        const rc={NORMAL:{bg:'rgba(99,153,34,0.2)',bc:'rgba(99,153,34,0.4)',c:'#97c459'},
+                  SUSPECT:{bg:'rgba(239,159,39,0.2)',bc:'rgba(239,159,39,0.4)',c:'#ef9f27'},
+                  CRITIQUE:{bg:'rgba(226,75,74,0.2)',bc:'rgba(226,75,74,0.4)',c:'#f09595'}};
+        const r=rc[risk];
+        rBadge.textContent=risk;rBadge.style.background=r.bg;rBadge.style.borderColor=r.bc;rBadge.style.color=r.c;
+      }
+      const sAlert=e('simAlert');
+      if(sAlert){
+        const msgs={NORMAL:'Situation normale — capteurs dans les seuils acceptables.',
+          SUSPECT:`Comportement suspect — Entrepôt ${whId} — score IF: ${sc.toFixed(3)}`,
+          CRITIQUE:`ALERTE CRITIQUE — Entrepôt ${whId} ! Score: ${sc.toFixed(3)} — intervention requise.`};
+        const ac={NORMAL:'rgba(99,153,34,0.1)',SUSPECT:'rgba(239,159,39,0.1)',CRITIQUE:'rgba(226,75,74,0.12)'};
+        const bc={NORMAL:'rgba(99,153,34,0.3)',SUSPECT:'rgba(239,159,39,0.35)',CRITIQUE:'rgba(226,75,74,0.4)'};
+        const tc={NORMAL:'#97c459',SUSPECT:'#ef9f27',CRITIQUE:'#f09595'};
+        sAlert.textContent=msgs[risk];sAlert.style.background=ac[risk];sAlert.style.borderColor=bc[risk];sAlert.style.color=tc[risk];
+      }
+      const durEl=e('simDuration');
+      if(durEl&&s.start) durEl.textContent=Math.round((Date.now()-s.start)/1000)+'s';
+
+      if(lineChart){
+        lineChart.data.labels.push(s.idx+1);
+        lineChart.data.datasets[0].data.push(sc);
+        lineChart.data.datasets[1].data.push(-0.099);
+        lineChart.data.datasets[2].data.push(-0.027);
+        if(lineChart.data.labels.length>winSize){
+          lineChart.data.labels.shift();
+          lineChart.data.datasets.forEach(d=>d.data.shift());
+        }
+        const lc=risk==='CRITIQUE'?'#e24b4a':risk==='SUSPECT'?'#ef9f27':'#4c52d4';
+        lineChart.data.datasets[0].borderColor=lc;
+        lineChart.update('none');
+      }
+    }
+  }
+
+  s.idx++;
+  s.timer=setTimeout(()=>simStep(whId),Math.max(30,140-simSpeed*30));
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE SIMULATEUR
+// ═══════════════════════════════════════════════════════
+function toggleSimWH(id){
+  const ids = id==='ALL'?['A','B','C']:[id];
+  ids.forEach(whId=>{
+    if(simWHs.includes(whId)){
+      if(simRunning) return; // ne peut pas retirer pendant simulation
+      if(simWHs.length>1) simWHs.splice(simWHs.indexOf(whId),1);
+    } else {
+      simWHs.push(whId);
+      if(simRunning){
+        // Démarrer ce nouvel entrepôt immédiatement
+        const s=simStates[whId];
+        s.running=true; s.idx=0; s.start=Date.now();
+        s.buffer=[]; s.stats={ptsCrit:0,ptsSusp:0,scoreMin:99,scoreMax:-99};
+        simStep(whId);
+        // Ajouter mini-card dans le DOM si on est sur la page sim
+        const grid=document.getElementById('whMinisGrid');
+        if(grid&&!document.getElementById('whMini_'+whId)){
+          const wh=whData.find(w=>w.id===whId)||{name:'Entrepôt '+whId,risk:'NORMAL',sensors:{co:0,lpg:0,temp:22,smoke:0}};
+          const rm=RISK_MAP['NORMAL'];
+          const div=document.createElement('div');
+          div.id='whMini_'+whId;
+          div.style.cssText=`border:0.5px solid ${rm.border};border-radius:7px;padding:8px;background:${rm.bg}`;
+          div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:10px;font-weight:500;color:${rm.color}">${wh.name}</span><span class="badge" style="background:${rm.color}22;color:${rm.color}">NORMAL</span></div><div style="font-size:9px;color:#3a3d6b;margin-top:3px">CO:0 · LPG:0 · 22°C</div>`;
+          grid.appendChild(div);
+          grid.style.gridTemplateColumns=`repeat(${simWHs.length},1fr)`;
+        }
+        // Ajouter onglet focus
+        const focusBar=document.getElementById('focusTabsBar');
+        if(focusBar&&!document.getElementById('focusBtn_'+whId)){
+          const btn=document.createElement('button');
+          btn.id='focusBtn_'+whId;
+          btn.onclick=()=>setSimFocus(whId);
+          btn.style.cssText='padding:3px 10px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);color:#6b6fa8;font-size:9px;cursor:pointer';
+          btn.textContent='Ent. '+whId;
+          focusBar.appendChild(btn);
+        }
+      }
+    }
+  });
+  if(!simWHs.includes(simFocus)) simFocus=simWHs[0];
+  updateWHBtns();
+}
+
+function updateWHBtns(){
+  ['A','B','C'].forEach(id=>{
+    const btn=document.getElementById('whBtn_'+id);
+    if(!btn) return;
+    const on=simWHs.includes(id);
+    btn.style.background=on?'#4c52d4':'rgba(255,255,255,0.05)';
+    btn.style.color=on?'white':'#6b6fa8';
+    btn.style.borderColor=on?'#4c52d4':'rgba(255,255,255,0.1)';
+  });
+}
+
+function setSimFocus(id){
+  if(!simWHs.includes(id)) return;
+  simFocus=id;
+  ['A','B','C'].forEach(w=>{
+    const btn=document.getElementById('focusBtn_'+w);
+    if(btn){btn.style.background=w===id?'rgba(76,82,212,0.4)':'rgba(255,255,255,0.03)';btn.style.color=w===id?'white':'#6b6fa8';btn.style.borderColor=w===id?'#4c52d4':'rgba(255,255,255,0.1)';}
+  });
+  if(lineChart) rebuildChart(id);
+}
+
+function rebuildChart(whId){
+  if(!lineChart) return;
+  const s=simStates[whId];
+  const winEl=document.getElementById('slWin');
+  const winSize=winEl?parseInt(winEl.value):80;
+  lineChart.data.labels=[];
+  lineChart.data.datasets.forEach(d=>d.data=[]);
+  const slice=s.buffer.slice(-winSize);
+  slice.forEach(p=>{
+    lineChart.data.labels.push(p.t);
+    lineChart.data.datasets[0].data.push(p.sc);
+    lineChart.data.datasets[1].data.push(-0.099);
+    lineChart.data.datasets[2].data.push(-0.027);
+  });
+  if(slice.length){
+    const last=slice[slice.length-1];
+    lineChart.data.datasets[0].borderColor=last.risk==='CRITIQUE'?'#e24b4a':last.risk==='SUSPECT'?'#ef9f27':'#4c52d4';
+  }
+  lineChart.update('none');
+}
+
+function pageSimHTML(){
+  const isRunning=simRunning;
+  const focSt=simStates[simFocus];
+  const focPts=focSt?focSt.idx:0;
+  const focStart=focSt?focSt.start:null;
+
+  const whBtns=['A','B','C'].map(id=>{
+    const on=simWHs.includes(id);
+    return `<button id="whBtn_${id}" onclick="toggleSimWH('${id}')" style="flex:1;padding:6px 4px;border-radius:6px;border:0.5px solid ${on?'#4c52d4':'rgba(255,255,255,0.1)'};background:${on?'#4c52d4':'rgba(255,255,255,0.05)'};color:${on?'white':'#6b6fa8'};font-size:11px;font-weight:500;cursor:pointer">${id}</button>`;
+  }).join('');
+
+  const whMinis=simWHs.map(id=>{
+    const wh=whData.find(w=>w.id===id)||{name:'Entrepôt '+id,risk:'NORMAL',sensors:{co:0,lpg:0,temp:22,smoke:0}};
+    const rm=RISK_MAP[wh.risk||'NORMAL'];
+    return `<div id="whMini_${id}" style="border:0.5px solid ${rm.border};border-radius:7px;padding:8px;background:${rm.bg}">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:10px;font-weight:500;color:${rm.color}">${wh.name}</span>
+        <span class="badge" style="background:${rm.color}22;color:${rm.color}">${wh.risk||'NORMAL'}</span></div>
+      <div style="font-size:9px;color:#3a3d6b;margin-top:3px">CO:${Math.round(wh.sensors.co||0)} · LPG:${Math.round(wh.sensors.lpg||0)} · ${rnd(wh.sensors.temp||22,1)}°C</div>
+    </div>`;
+  }).join('');
+
+  const focusTabs=simWHs.map(id=>
+    `<button id="focusBtn_${id}" onclick="setSimFocus('${id}')" style="padding:3px 10px;border-radius:6px;border:0.5px solid ${id===simFocus?'#4c52d4':'rgba(255,255,255,0.1)'};background:${id===simFocus?'rgba(76,82,212,0.4)':'rgba(255,255,255,0.03)'};color:${id===simFocus?'white':'#6b6fa8'};font-size:9px;cursor:pointer">Ent. ${id}</button>`
+  ).join('');
+
+  const scOpts=Object.entries(SC_CFG).map(([k,v])=>`<option value="${k}"${k===simSC?' selected':''}>${v.label}</option>`).join('');
+
+  return `<div class="page-head">
+    <div><div class="page-title">Simulateur d'injection</div>
+    <div class="page-sub">Multi-entrepôt · Simulation infinie · Arrêt manuel · Sauvegarde InfluxDB</div></div>
+    <span class="badge" id="simStatus" style="background:${isRunning?'rgba(226,75,74,0.2)':'rgba(76,82,212,0.2)'};color:${isRunning?'#e24b4a':'#9da2ff'};border:0.5px solid ${isRunning?'#e24b4a44':'#4c52d446'}">
+      ${isRunning?'<span class="live-dot"></span>Injection active ('+simWHs.length+' ent.)':'En attente'}</span></div>
+  <div class="sim-panel">
+    <div class="sim-ctrl">
+      <div style="font-size:9px;color:#3a3d6b;text-transform:uppercase;letter-spacing:.08em">Entrepôts cibles</div>
+      <div style="display:flex;gap:4px;margin-bottom:4px">${whBtns}</div>
+      <button onclick="toggleSimWH('ALL')" style="width:100%;padding:4px;border-radius:6px;border:0.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:#4c4f7a;font-size:9px;cursor:pointer${isRunning?';opacity:.4;pointer-events:none':''}">Tous les entrepôts (A+B+C)</button>
+      <div style="font-size:9px;color:#3a3d6b;text-transform:uppercase;letter-spacing:.08em;margin-top:6px">Scénario (tous)</div>
+      <select class="sc-select" id="scSelect">${scOpts}</select>
+      <div class="sl-wrap"><div class="sl-head"><span class="sl-lbl">Intensité gaz (×)</span><span class="sl-v" id="vInt">${simIntensity.toFixed(1)}</span></div>
+        <input type="range" min="5" max="30" step="1" value="${Math.round(simIntensity*10)}" id="slInt" oninput="document.getElementById('vInt').textContent=(this.value/10).toFixed(1)"></div>
+      <div class="sl-wrap"><div class="sl-head"><span class="sl-lbl">Vitesse diffusion</span><span class="sl-v" id="vSpd">×${simSpeed}</span></div>
+        <input type="range" min="1" max="4" step="1" value="${simSpeed}" id="slSpd" oninput="document.getElementById('vSpd').textContent='×'+this.value"></div>
+      <div class="sl-wrap"><div class="sl-head"><span class="sl-lbl">Fenêtre graphe (pts)</span><span class="sl-v" id="vWin">80</span></div>
+        <input type="range" min="30" max="200" step="10" value="80" id="slWin" oninput="document.getElementById('vWin').textContent=this.value"></div>
+      <div style="font-size:9px;color:#3a3d6b;margin-top:4px">Durée (${simFocus}) : <span id="simDuration" style="color:#9da2ff">${focStart?Math.round((Date.now()-focStart)/1000)+'s':'—'}</span></div>
+      <div style="font-size:9px;color:#3a3d6b">Points (${simFocus}) : <span id="simPtsCount" style="color:#9da2ff">${focPts}</span></div>
+      <button class="inject-btn" id="btnInj" onclick="startSim()"${isRunning?' disabled':''}>Injecter le scénario</button>
+      <button class="stop-btn" id="btnStop" onclick="stopSim()" style="${isRunning?'':'display:none'}">⏹ Arrêter et sauvegarder</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div id="whMinisGrid" style="display:grid;grid-template-columns:repeat(${simWHs.length},1fr);gap:6px">${whMinis}</div>
+      <div class="card" style="padding:10px">
+        <div class="card-h">
+          <div id="focusTabsBar" style="display:flex;gap:4px">${focusTabs}</div>
+          <span id="rBadge" class="badge" style="background:rgba(76,82,212,0.2);color:#9da2ff;border:0.5px solid #4c52d446">EN ATTENTE</span>
+        </div>
+        <div style="position:relative;width:100%;height:130px"><canvas id="simLine"></canvas></div>
+        <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px;margin-top:6px;overflow:hidden">
+          <div id="simProg" style="height:100%;width:${isRunning?'100':'0'}%;background:${isRunning?'#4c52d4':'transparent'};border-radius:2px;${isRunning?'animation:progPulse 2s ease-in-out infinite':'transition:width .3s'}"></div>
+        </div>
+        <style>@keyframes progPulse{0%{opacity:.4;width:20%}50%{opacity:1;width:100%}100%{opacity:.4;width:20%}}</style>
+        <div style="display:flex;justify-content:space-between;font-size:8px;color:#3a3d6b;margin-top:4px">
+          <span>P5 = -0.099 (CRITIQUE)</span><span>P10 = -0.027 (SUSPECT)</span>
+        </div>
+      </div>
+      <div class="sensor-mini-grid">
+        <div class="sensor-mini"><div class="sm-lbl">CO <span class="sm-unit">ppm</span></div><div class="sm-val" id="smCO">—</div><div class="sm-bar"><div class="sm-fill" id="sbCO" style="width:0%;background:#e24b4a"></div></div></div>
+        <div class="sensor-mini"><div class="sm-lbl">LPG <span class="sm-unit">ppm</span></div><div class="sm-val" id="smLPG">—</div><div class="sm-bar"><div class="sm-fill" id="sbLPG" style="width:0%;background:#ef9f27"></div></div></div>
+        <div class="sensor-mini"><div class="sm-lbl">Temp <span class="sm-unit">°C</span></div><div class="sm-val" id="smTMP">—</div><div class="sm-bar"><div class="sm-fill" id="sbTMP" style="width:0%;background:#f0997b"></div></div></div>
+        <div class="sensor-mini"><div class="sm-lbl">Fumée <span class="sm-unit">%</span></div><div class="sm-val" id="smSMK">—</div><div class="sm-bar"><div class="sm-fill" id="sbSMK" style="width:0%;background:#888780"></div></div></div>
+        <div class="sensor-mini"><div class="sm-lbl">Score IF</div><div class="sm-val" id="smIF" style="font-size:13px">—</div><div class="sm-bar"><div class="sm-fill" id="sbIF" style="width:50%;background:#4c52d4"></div></div></div>
+        <div class="sensor-mini"><div class="sm-lbl">Pts (${simFocus})</div><div class="sm-val" id="smPTS" style="font-size:13px">${focPts}</div><div class="sm-bar"><div class="sm-fill" id="sbPTS" style="width:0%;background:#7b80ff"></div></div></div>
+      </div>
+      <div class="alert-strip" id="simAlert" style="background:rgba(76,82,212,0.08);border-color:rgba(76,82,212,0.2);color:#7b80ff">
+        ${isRunning?'Simulation en cours...':'Sélectionnez les entrepôts cibles et cliquez "Injecter" pour démarrer.'}
+      </div>
+    </div>
+  </div>`;
+}
+
+function initSimChart(){
+  if(lineChart){lineChart.destroy();lineChart=null;}
+  const cv=document.getElementById('simLine'); if(!cv)return;
+  lineChart=new Chart(cv.getContext('2d'),{
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'Score',data:[],borderColor:'#4c52d4',borderWidth:2,pointRadius:0,fill:true,backgroundColor:'rgba(76,82,212,0.07)',tension:0.3},
+      {label:'Critique',data:[],borderColor:'#e24b4a',borderWidth:1,pointRadius:0,fill:false,borderDash:[4,3]},
+      {label:'Suspect', data:[],borderColor:'#ef9f27',borderWidth:1,pointRadius:0,fill:false,borderDash:[2,3]},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{x:{display:false},y:{min:-0.38,max:0.32,
+        grid:{color:'rgba(255,255,255,0.04)'},
+        ticks:{color:'#3a3d6b',font:{size:8},callback:v=>v.toFixed(2)}}}}
+  });
+}
+
+function restoreSimPage(){
+  const sc=document.getElementById('scSelect');
+  if(sc) sc.addEventListener('change',e=>{if(!simRunning)simSC=e.target.value;});
+  updateWHBtns();
+  initSimChart();
+  rebuildChart(simFocus);
+  // Restore rBadge
+  const s=simStates[simFocus];
+  if(s.buffer.length>0){
+    const last=s.buffer[s.buffer.length-1];
+    const rBadge=document.getElementById('rBadge');
+    if(rBadge){
+      const rc={NORMAL:{bg:'rgba(99,153,34,0.2)',bc:'rgba(99,153,34,0.4)',c:'#97c459'},
+                SUSPECT:{bg:'rgba(239,159,39,0.2)',bc:'rgba(239,159,39,0.4)',c:'#ef9f27'},
+                CRITIQUE:{bg:'rgba(226,75,74,0.2)',bc:'rgba(226,75,74,0.4)',c:'#f09595'}};
+      const r=rc[last.risk];
+      rBadge.textContent=last.risk;rBadge.style.background=r.bg;rBadge.style.borderColor=r.bc;rBadge.style.color=r.c;
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE HISTORIQUE
+// ═══════════════════════════════════════════════════════
+async function pageHistorique(){
+  const c=document.getElementById('mainContent');
+  c.innerHTML=`<div class="page-head">
+    <div><div class="page-title">Historique</div><div class="page-sub">Simulations · Alertes PACTE · Logs capteurs</div></div>
+    <button onclick="pageHistorique()" class="badge" style="background:rgba(76,82,212,0.2);color:#9da2ff;border:0.5px solid #4c52d446;cursor:pointer;padding:5px 12px">↻ Actualiser</button>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showHistTab('sims',this)">Simulations</button>
+    <button class="tab-btn" onclick="showHistTab('alerts',this)">Alertes PACTE</button>
+    <button class="tab-btn" onclick="showHistTab('sensors',this)">Logs capteurs</button>
+  </div>
+  <div id="histContent"><div style="color:#3a3d6b;font-size:11px;padding:20px;text-align:center">Chargement...</div></div>`;
+  loadHistTab('sims');
+}
+
+let _histTab='sims';
+function showHistTab(tab, btn){
+  _histTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  loadHistTab(tab);
+}
+
+async function loadHistTab(tab){
+  const el=document.getElementById('histContent');
+  if(!el) return;
+  el.innerHTML='<div style="color:#3a3d6b;font-size:11px;padding:20px;text-align:center">Chargement...</div>';
+  try{
+    if(tab==='sims'){
+      const r=await fetch('/api/simulation/history');
+      const d=await r.json();
+      if(!d.data||d.data.length===0){
+        el.innerHTML='<div style="color:#3a3d6b;font-size:11px;padding:20px;text-align:center">Aucune simulation enregistrée.</div>';
+        return;
+      }
+      const rows=d.data.map(s=>{
+        const pctC=s.pts_total?Math.round(s.pts_critique/s.pts_total*100):0;
+        const pctS=s.pts_total?Math.round(s.pts_suspect/s.pts_total*100):0;
+        const ts=s.ts?s.ts.replace('T',' ').slice(0,19):'—';
+        return `<tr>
+          <td>${ts}</td>
+          <td><span class="badge" style="background:rgba(76,82,212,0.2);color:#9da2ff">${s.entrepot}</span></td>
+          <td style="color:white">${s.scenario}</td>
+          <td style="color:#9da2ff">${s.intensite}×</td>
+          <td style="color:#9da2ff">${s.duree_sec}s</td>
+          <td style="color:#9da2ff">${s.pts_total}</td>
+          <td><span style="color:#e24b4a">${s.pts_critique}</span> <span style="color:#3a3d6b">(${pctC}%)</span></td>
+          <td><span style="color:#ef9f27">${s.pts_suspect}</span> <span style="color:#3a3d6b">(${pctS}%)</span></td>
+          <td style="color:#97c459">${s.recall}%</td>
+        </tr>`;
+      }).join('');
+      el.innerHTML=`<div class="card" style="overflow-x:auto"><table class="hist-table">
+        <thead><tr><th>Horodatage</th><th>Entrepôt</th><th>Scénario</th><th>Intensité</th><th>Durée</th><th>Points</th><th>Critiques</th><th>Suspects</th><th>Recall SIL1</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`;
+    }
+    else if(tab==='alerts'){
+      const r=await fetch('/api/alerts/history');
+      const d=await r.json();
+      if(!d.ok||!d.data||d.data.length===0){
+        el.innerHTML=`<div style="color:#3a3d6b;font-size:11px;padding:20px;text-align:center">${d.error||'Aucune alerte critique trouvée.'}</div>`;
+        return;
+      }
+      const rows=d.data.map(a=>{
+        const ts=a.ts?a.ts.replace('T',' ').slice(0,19):'—';
+        return `<tr>
+          <td>${ts}</td>
+          <td style="color:#9da2ff;font-family:monospace;font-size:9px">${a.device||'—'}</td>
+          <td style="color:white">${a.scenario||'—'}</td>
+          <td style="color:#e24b4a;font-weight:500">${a.score}</td>
+          <td><span class="badge" style="background:rgba(226,75,74,0.2);color:#f09595">CRITIQUE</span></td>
+        </tr>`;
+      }).join('');
+      el.innerHTML=`<div class="card" style="overflow-x:auto"><div style="font-size:9px;color:#3a3d6b;margin-bottom:8px">${d.data.length} alertes critiques — 7 derniers jours</div>
+        <table class="hist-table">
+          <thead><tr><th>Horodatage</th><th>Device</th><th>Scénario</th><th>Score IF</th><th>Niveau</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table></div>`;
+    }
+    else if(tab==='sensors'){
+      const r=await fetch('/api/sensor/history');
+      const d=await r.json();
+      if(!d.ok||!d.data||d.data.length===0){
+        el.innerHTML=`<div style="color:#3a3d6b;font-size:11px;padding:20px;text-align:center">${d.error||'Aucune donnée capteur trouvée.'}</div>`;
+        return;
+      }
+      const rows=d.data.map(s=>{
+        const ts=s.ts?s.ts.replace('T',' ').slice(0,19):'—';
+        const rc=RISK_MAP[s.risk]||RISK_MAP.NORMAL;
+        return `<tr>
+          <td>${ts}</td>
+          <td style="color:#9da2ff;font-family:monospace;font-size:9px">${s.device||'—'}</td>
+          <td style="color:white;font-weight:500">${s.score}</td>
+          <td><span class="badge" style="background:${rc.bg};color:${rc.color}">${s.risk}</span></td>
+        </tr>`;
+      }).join('');
+      el.innerHTML=`<div class="card" style="overflow-x:auto"><div style="font-size:9px;color:#3a3d6b;margin-bottom:8px">${d.data.length} événements — 24 dernières heures</div>
+        <table class="hist-table">
+          <thead><tr><th>Horodatage</th><th>Device</th><th>Score IF</th><th>Niveau</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table></div>`;
+    }
+  }catch(e){
+    el.innerHTML=`<div style="color:#e24b4a;font-size:11px;padding:20px">Erreur : ${e.message}</div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE DASHBOARD
+// ═══════════════════════════════════════════════════════
+function pageDashboard(){
+  const d=window.INFLUX_DATA||{};
+  const tot=d.tot||9953,nc=d.nc||2846,ns=d.ns||694,nn=d.nn||6413;
+  const src=d.connected?'InfluxDB Cloud':'Mode démo';
+  return `<div class="page-head"><div><div class="page-title">Tableau de bord</div>
+    <div class="page-sub">Vue globale · 30 derniers jours · <span style="color:#4c52d4">${src}</span></div></div>
+    <span class="badge" style="background:rgba(76,82,212,0.2);color:#9da2ff;border:0.5px solid #4c52d446"><span class="live-dot"></span>Live</span></div>
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-l">Total analysés</div><div class="kpi-v" style="color:white">${tot.toLocaleString()}</div><div class="kpi-s" style="color:#4c52d4">30 derniers jours</div></div>
+    <div class="kpi"><div class="kpi-l">Alertes critiques</div><div class="kpi-v" style="color:#e24b4a">${nc.toLocaleString()}</div><div class="kpi-s" style="color:#a32d2d">${(nc/tot*100).toFixed(1)}% du total</div></div>
+    <div class="kpi"><div class="kpi-l">Suspects</div><div class="kpi-v" style="color:#ef9f27">${ns.toLocaleString()}</div><div class="kpi-s" style="color:#854f0b">${(ns/tot*100).toFixed(1)}% du total</div></div>
+    <div class="kpi"><div class="kpi-l">Normaux</div><div class="kpi-v" style="color:#639922">${nn.toLocaleString()}</div><div class="kpi-s" style="color:#3b6d11">${(nn/tot*100).toFixed(1)}% du total</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><div class="card-h"><span class="card-t">Alertes par scénario</span><span class="badge" style="background:rgba(255,255,255,0.05);color:#3a3d6b">30j</span></div>
+      <div style="position:relative;width:100%;height:160px"><canvas id="dashBar"></canvas></div></div>
+    <div class="card"><div class="card-h"><span class="card-t">Recall SIL 1 par scénario</span></div>
+    ${['fuite_chimique_lente:95.8','fuite_lpg:100','incendie_entrepot:97.2','intrusion_nocturne:100','panne_capteur:91.0'].map(r=>{
+      const[n,v]=r.split(':');const pct=parseFloat(v);
+      return `<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+        <div style="font-size:9px;color:#6b6fa8;width:110px;flex-shrink:0">${n.replace(/_/g,' ')}</div>
+        <div style="flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:${pct>=90?'#639922':'#e24b4a'};border-radius:2px"></div></div>
+        <div style="font-size:9px;color:${pct>=90?'#639922':'#e24b4a'};width:34px;text-align:right">${v}%</div>
+      </div>`;}).join('')}
+    </div>
+  </div>
+  <div class="grid3">${whData.map(w=>`
+  <div id="dashWH_${w.id}" style="background:#1a1a30;border:0.5px solid ${w.border};border-radius:9px;padding:10px;transition:border-color .4s">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <span style="font-size:11px;font-weight:500;color:white">${w.name}</span>
+      <span id="dashWHBadge_${w.id}" class="badge" style="background:${w.color}22;color:${w.color}">${w.risk}</span>
+    </div>
+    <div style="font-size:9px;color:#3a3d6b;margin-bottom:6px">${w.addr}</div>
+    <div id="dashWHSensors_${w.id}" style="font-size:10px;color:#9da2ff">CO: ${Math.round(w.sensors.co)} · LPG: ${Math.round(w.sensors.lpg)} · ${rnd(w.sensors.temp,1)}°C</div>
+  </div>`).join('')}</div>`;
+}
+
+function initDashChart(){
+  const d=window.INFLUX_DATA||{};
+  const sc=d.scenarios||{};
+  const labels=Object.keys(sc).length?Object.keys(sc):['incendie','chim.','LPG','panne','surchauffe','intrusion'];
+  const vals=Object.keys(sc).length?Object.values(sc):[484,712,122,174,353,10];
+  const cv=document.getElementById('dashBar');if(!cv)return;
+  new Chart(cv.getContext('2d'),{
+    type:'bar',
+    data:{labels,datasets:[{data:vals,backgroundColor:['#e24b4a','#7b80ff','#ef9f27','#888780','#f0997b','#9da2ff'],borderWidth:0,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+' alertes'}}},
+      scales:{x:{ticks:{color:'#3a3d6b',font:{size:8}},grid:{display:false}},
+              y:{ticks:{color:'#3a3d6b',font:{size:8}},grid:{color:'rgba(255,255,255,0.04)'}}}}
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  SVG CARTE PORTUAIRE
+// ═══════════════════════════════════════════════════════
+function riskFillPct(risk,score){
+  if(risk==='CRITIQUE') return Math.min(92, 55+Math.abs(score||0.1)*180);
+  if(risk==='SUSPECT')  return Math.min(50, 22+Math.abs(score||0.03)*280);
+  return 8;
+}
+
+function whSVG(wh,cx,topY,w,h,interactive){
+  const bc={NORMAL:'#639922',SUSPECT:'#ef9f27',CRITIQUE:'#e24b4a'}[wh.risk];
+  const x=cx-w/2, roofH=18, bodyY=topY+roofH, bodyH=h-roofH;
+  const s=simStates[wh.id];
+  const lastPt=s&&s.buffer.length?s.buffer[s.buffer.length-1]:null;
+  const fillPct=riskFillPct(wh.risk,lastPt?lastPt.sc:null);
+  const fillH=bodyH*fillPct/100;
+  const fillY=bodyY+bodyH-fillH;
+  const oc=interactive?`data-wh="${wh.id}" onclick="selectWarehouse(this)" style="cursor:pointer"`:'';
+  const clipId='clip_'+wh.id;
+  const corrLines=[0.22,0.38,0.54,0.70,0.86].map(f=>
+    `<line x1="${x+2}" y1="${bodyY+f*bodyH}" x2="${x+w-2}" y2="${bodyY+f*bodyH}" stroke="#fff" stroke-width="0.5" opacity="0.05"/>`).join('');
+  const wy=bodyY+14;
+  const wins=`<rect x="${x+7}" y="${wy}" width="14" height="10" fill="${bc}20" stroke="${bc}" stroke-width="0.7" rx="1"/>
+    <line x1="${x+14}" y1="${wy}" x2="${x+14}" y2="${wy+10}" stroke="${bc}" stroke-width="0.4" opacity="0.4"/>
+    <rect x="${x+w-21}" y="${wy}" width="14" height="10" fill="${bc}20" stroke="${bc}" stroke-width="0.7" rx="1"/>
+    <line x1="${x+w-14}" y1="${wy}" x2="${x+w-14}" y2="${wy+10}" stroke="${bc}" stroke-width="0.4" opacity="0.4"/>`;
+  const dw=28,dh=36,dx=cx-14;
+  const door=`<rect x="${dx}" y="${bodyY+bodyH-dh}" width="${dw}" height="${dh}" fill="${bc}12" stroke="${bc}" stroke-width="0.8"/>
+    ${[0.3,0.55,0.78].map(f=>`<line x1="${dx}" y1="${bodyY+bodyH-dh+f*dh}" x2="${dx+dw}" y2="${bodyY+bodyH-dh+f*dh}" stroke="${bc}" stroke-width="0.35" opacity="0.35"/>`).join('')}`;
+  const sensor=`<circle cx="${x+w-9}" cy="${bodyY+9}" r="4" fill="none" stroke="${bc}" stroke-width="0.8" opacity="0.65"/>
+    <circle cx="${x+w-9}" cy="${bodyY+9}" r="1.5" fill="${bc}" opacity="0.9"/>
+    <circle cx="${x+w-9}" cy="${bodyY+9}" r="7" fill="none" stroke="${bc}" stroke-width="0.3" opacity="0.3"/>`;
+  const pulse=wh.risk==='CRITIQUE'?`<animate attributeName="opacity" values="0.22;0.38;0.22" dur="1.4s" repeatCount="indefinite"/>`:``;
+  return `<defs><clipPath id="${clipId}"><rect x="${x}" y="${bodyY}" width="${w}" height="${bodyH}"/></clipPath></defs>
+  <g id="svgWH_${wh.id}" ${oc}>
+    <rect x="${x+4}" y="${bodyY+4}" width="${w}" height="${bodyH}" fill="rgba(0,0,0,0.35)" rx="1"/>
+    <rect x="${x}" y="${bodyY}" width="${w}" height="${bodyH}" fill="#09091a" stroke="${bc}" stroke-width="1.5" rx="1"/>
+    <rect id="svgFill_${wh.id}" x="${x+1}" y="${fillY}" width="${w-2}" height="${fillH}" fill="${bc}" opacity="0.2" clip-path="url(#${clipId})">${pulse}</rect>
+    <polygon points="${x-3},${bodyY} ${cx},${topY} ${x+w+3},${bodyY}" fill="#09091a" stroke="${bc}" stroke-width="1.5"/>
+    <line x1="${cx-5}" y1="${topY+3}" x2="${cx+5}" y2="${topY+3}" stroke="${bc}" stroke-width="1" opacity="0.45"/>
+    ${corrLines}${wins}${door}${sensor}
+    <text x="${cx}" y="${topY-5}" fill="${bc}" font-size="9" text-anchor="middle" font-family="sans-serif" font-weight="600">${wh.name}</text>
+    <text id="svgFillLbl_${wh.id}" x="${x+w-4}" y="${Math.max(fillY-2, bodyY+6)}" fill="${bc}" font-size="6.5" text-anchor="end" font-family="sans-serif" opacity="0.75">${Math.round(fillPct)}%</text>
+    <rect x="${cx-30}" y="${bodyY+bodyH-15}" width="60" height="13" fill="${bc}25" rx="2" stroke="${bc}" stroke-width="0.6"/>
+    <text id="svgRisk_${wh.id}" x="${cx}" y="${bodyY+bodyH-5}" fill="${bc}" font-size="7.5" text-anchor="middle" font-family="sans-serif" font-weight="bold">${wh.risk}</text>
+  </g>`;
+}
+
+function portMapSVG(interactive){
+  return `<div style="background:#080812;border:0.5px solid rgba(255,255,255,0.08);border-radius:9px;padding:12px;overflow:hidden">
+  <div style="font-size:10px;color:#3a3d6b;margin-bottom:8px;display:flex;justify-content:space-between">
+    <span>Plan schématique — Zone portuaire Casablanca</span><span style="color:#4c52d4;font-size:9px">PACTE IoT</span></div>
+  <svg viewBox="0 0 480 260" width="100%" id="portSVG">
+    <defs><linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#08152a"/><stop offset="100%" stop-color="#050e1a"/>
+    </linearGradient></defs>
+    <rect width="480" height="260" fill="#080812"/>
+    <rect x="0" y="178" width="480" height="30" fill="#0c0e1e"/>
+    <line x1="0" y1="178" x2="480" y2="178" stroke="#1a1d3a" stroke-width="1.5"/>
+    <line x1="0" y1="193" x2="480" y2="193" stroke="#13152a" stroke-width="0.5" stroke-dasharray="18,12"/>
+    <rect x="0" y="208" width="480" height="52" fill="url(#seaG)"/>
+    <line x1="0" y1="208" x2="480" y2="208" stroke="#0e2040" stroke-width="1.2"/>
+    <path d="M0,218 Q40,213 80,218 Q120,223 160,218 Q200,213 240,218 Q280,223 320,218 Q360,213 400,218 Q440,223 480,218" fill="none" stroke="#0e2540" stroke-width="1" opacity="0.7"/>
+    <path d="M0,232 Q60,228 120,232 Q180,236 240,232 Q300,228 360,232 Q420,236 480,232" fill="none" stroke="#0e2040" stroke-width="0.6" opacity="0.4"/>
+    <text x="240" y="250" fill="#0e2040" font-size="8" text-anchor="middle" font-family="sans-serif" letter-spacing="3">MER MÉDITERRANÉE</text>
+    <text x="115" y="11" fill="#1e2150" font-size="7" text-anchor="middle" font-family="sans-serif" letter-spacing="1">QUAI NORD</text>
+    <text x="245" y="11" fill="#1e2150" font-size="7" text-anchor="middle" font-family="sans-serif" letter-spacing="1">QUAI CENTRAL</text>
+    <text x="375" y="11" fill="#1e2150" font-size="7" text-anchor="middle" font-family="sans-serif" letter-spacing="1">QUAI SUD</text>
+    <rect x="92" y="178" width="46" height="30" fill="#0a0c1c" stroke="#1a1d3a" stroke-width="0.5"/>
+    <rect x="222" y="178" width="46" height="30" fill="#0a0c1c" stroke="#1a1d3a" stroke-width="0.5"/>
+    <rect x="352" y="178" width="46" height="30" fill="#0a0c1c" stroke="#1a1d3a" stroke-width="0.5"/>
+    <rect x="452" y="130" width="7" height="48" fill="#0e1020" stroke="#151830" stroke-width="0.5"/>
+    <line x1="455" y1="130" x2="472" y2="112" stroke="#151830" stroke-width="1.2"/>
+    <line x1="455" y1="130" x2="438" y2="118" stroke="#151830" stroke-width="1.2"/>
+    <line x1="115" y1="55" x2="245" y2="55" stroke="#4c52d4" stroke-width="0.5" stroke-dasharray="5,5" opacity="0.22"/>
+    <line x1="245" y1="55" x2="375" y2="55" stroke="#4c52d4" stroke-width="0.5" stroke-dasharray="5,5" opacity="0.22"/>
+    <circle cx="180" cy="55" r="2" fill="#4c52d4" opacity="0.35"/>
+    <circle cx="310" cy="55" r="2" fill="#4c52d4" opacity="0.35"/>
+    ${whSVG(whData[0],115,18,125,155,interactive)}
+    ${whSVG(whData[1],245,18,125,155,interactive)}
+    ${whSVG(whData[2],375,18,125,155,interactive)}
+    <circle cx="10" cy="254" r="3" fill="#639922"/>
+    <text x="17" y="258" fill="#639922" font-size="7" font-family="sans-serif">Normal</text>
+    <circle cx="58" cy="254" r="3" fill="#ef9f27"/>
+    <text x="65" y="258" fill="#ef9f27" font-size="7" font-family="sans-serif">Suspect</text>
+    <circle cx="110" cy="254" r="3" fill="#e24b4a"/>
+    <text x="117" y="258" fill="#e24b4a" font-size="7" font-family="sans-serif">Critique</text>
+    <circle cx="158" cy="254" r="2" fill="#4c52d4"/>
+    <text x="164" y="258" fill="#4c52d4" font-size="7" font-family="sans-serif">Réseau IoT</text>
+  </svg></div>`;
+}
+
+function updateSVGWarehouse(whId){
+  const wh=whData.find(w=>w.id===whId); if(!wh) return;
+  const bc={NORMAL:'#639922',SUSPECT:'#ef9f27',CRITIQUE:'#e24b4a'}[wh.risk];
+  const s=simStates[whId];
+  const lastPt=s&&s.buffer.length?s.buffer[s.buffer.length-1]:null;
+  const fillPct=riskFillPct(wh.risk,lastPt?lastPt.sc:null);
+  const bodyY=36, bodyH=137; // topY=18 + roofH=18, h=155
+  const fillH=bodyH*fillPct/100;
+  const fillEl=document.getElementById('svgFill_'+whId);
+  const riskEl=document.getElementById('svgRisk_'+whId);
+  const lblEl=document.getElementById('svgFillLbl_'+whId);
+  if(fillEl){fillEl.setAttribute('y',bodyY+bodyH-fillH);fillEl.setAttribute('height',fillH);fillEl.setAttribute('fill',bc);}
+  if(riskEl){riskEl.textContent=wh.risk;riskEl.setAttribute('fill',bc);}
+  if(lblEl){lblEl.textContent=Math.round(fillPct)+'%';lblEl.setAttribute('fill',bc);lblEl.setAttribute('y',Math.max(bodyY+bodyH-fillH-2,bodyY+6));}
+}
+
+function selectWarehouse(el){
+  const id=el.dataset.wh;
+  if(!simWHs.includes(id)) simWHs=[id];
+  navTo('Simulateur');
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE CARTOGRAPHIE
+// ═══════════════════════════════════════════════════════
+function pageCartoHTML(){
+  const wDetail=whData.map(w=>{
+    const mCO=Math.min(100,w.sensors.co/5),mLPG=Math.min(100,w.sensors.lpg/10),
+          mTMP=Math.min(100,(w.sensors.temp-20)/50*100),mSMK=Math.min(100,w.sensors.smoke);
+    return `<div class="wh-card" style="background:${w.bg};border-color:${w.border};color:white">
+      <div class="wh-name" style="color:${w.color}">${w.name}</div>
+      <div class="wh-addr">${w.addr}</div>
+      <div class="wh-meters">
+        <div class="meter-row"><span class="meter-lbl">CO</span><div class="meter-bar"><div class="meter-fill" style="width:${mCO}%;background:#e24b4a"></div></div><span class="meter-val">${Math.round(w.sensors.co)}ppm</span></div>
+        <div class="meter-row"><span class="meter-lbl">LPG</span><div class="meter-bar"><div class="meter-fill" style="width:${mLPG}%;background:#ef9f27"></div></div><span class="meter-val">${Math.round(w.sensors.lpg)}ppm</span></div>
+        <div class="meter-row"><span class="meter-lbl">Temp</span><div class="meter-bar"><div class="meter-fill" style="width:${mTMP}%;background:#f0997b"></div></div><span class="meter-val">${rnd(w.sensors.temp,1)}°C</span></div>
+        <div class="meter-row"><span class="meter-lbl">Fumée</span><div class="meter-bar"><div class="meter-fill" style="width:${mSMK}%;background:#888780"></div></div><span class="meter-val">${Math.round(w.sensors.smoke)}%</span></div>
+      </div>
+      <div class="wh-status" style="background:${w.color}22;color:${w.color}">${w.risk}</div>
+    </div>`;}).join('');
+  return `<div class="page-head"><div><div class="page-title">Cartographie portuaire</div><div class="page-sub">Vue temps réel · 3 entrepôts surveillés</div></div>
+    <span class="badge" style="background:rgba(76,82,212,0.2);color:#9da2ff;border:0.5px solid #4c52d446"><span class="live-dot"></span>Live</span></div>
+  ${portMapSVG(true)}
+  <div class="grid3">${wDetail}</div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE SITUATION PUBLIQUE
+// ═══════════════════════════════════════════════════════
+function pagePublic(){
+  const nCrit=whData.filter(w=>w.risk==='CRITIQUE').length;
+  const nSusp=whData.filter(w=>w.risk==='SUSPECT').length;
+  let cls,icon,title,msg;
+  if(nCrit>0){cls='rgba(226,75,74,0.15)';icon='#e24b4a';title='Niveau CRITIQUE';msg=`${nCrit} zone(s) en état critique. Équipes de sécurité mobilisées.`}
+  else if(nSusp>0){cls='rgba(239,159,39,0.12)';icon='#ef9f27';title='Vigilance requise';msg=`${nSusp} zone(s) suspecte(s) en cours d'analyse.`}
+  else{cls='rgba(99,153,34,0.12)';icon='#639922';title='Situation normale';msg='Toutes les zones portuaires sont opérationnelles.'}
+  return `<div class="page-head"><div><div class="page-title">Situation portuaire</div><div class="page-sub">Accès public · ${new Date().toLocaleDateString('fr-FR')}</div></div></div>
+  <div style="background:${cls};border:0.5px solid ${icon}44;border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:14px">
+    <div style="width:36px;height:36px;border-radius:50%;background:${icon}33;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <div style="width:14px;height:14px;border-radius:50%;background:${icon}"></div></div>
+    <div><div style="font-size:13px;font-weight:500;color:white">${title}</div><div style="font-size:11px;color:#9da2ff;margin-top:2px">${msg}</div></div>
+  </div>
+  <div class="grid3">${whData.map(w=>`
+  <div style="background:#1a1a30;border:0.5px solid ${w.border};border-radius:9px;padding:12px">
+    <div style="font-size:11px;font-weight:500;color:white;margin-bottom:2px">${w.name}</div>
+    <div style="font-size:9px;color:#3a3d6b;margin-bottom:8px">${w.addr}</div>
+    <div style="font-size:20px;font-weight:500;color:${w.color};margin-bottom:4px">${w.risk}</div>
+    <div style="font-size:9px;color:#4c4f7a">CO: ${Math.round(w.sensors.co)} ppm · Temp: ${rnd(w.sensors.temp,1)}°C</div>
+  </div>`).join('')}</div>`;
+}
+
+function pageCarteRisques(){
+  return `<div class="page-head"><div><div class="page-title">Carte des risques</div><div class="page-sub">Zones portuaires · Vue publique</div></div></div>
+  ${portMapSVG(false)}
+  <div class="grid3">${whData.map(w=>`
+  <div style="background:${w.bg};border:0.5px solid ${w.border};border-radius:9px;padding:10px;text-align:center">
+    <div style="font-size:11px;font-weight:500;color:white">${w.name}</div>
+    <div style="font-size:18px;font-weight:500;color:${w.color};margin:4px 0">${w.risk}</div>
+    <div style="font-size:9px;color:#4c4f7a">${w.addr}</div>
+  </div>`).join('')}</div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE UTILISATEURS
+// ═══════════════════════════════════════════════════════
+function pageUsers(){
+  const rows=USERS_LIST.map((u,i)=>`<tr>
+    <td style="color:white">${u.name}</td>
+    <td><span class="badge" style="background:${u.role==='admin'?'rgba(226,75,74,0.2)':u.role==='operateur'?'rgba(239,159,39,0.2)':'rgba(99,153,34,0.2)'};color:${u.role==='admin'?'#f09595':u.role==='operateur'?'#ef9f27':'#97c459'}">${ROLES[u.role].label}</span></td>
+    <td style="color:#3a3d6b">${u.email}</td>
+    <td><button class="toggle ${u.active?'on':'off'}" id="tog_${i}" onclick="toggleUser(${i})"></button></td>
+  </tr>`).join('');
+  return `<div class="page-head"><div><div class="page-title">Gestion des utilisateurs</div><div class="page-sub">Accès et permissions · Admin uniquement</div></div>
+    <button class="badge" style="background:rgba(76,82,212,0.2);color:#9da2ff;border:0.5px solid #4c52d446;cursor:pointer;padding:5px 12px">+ Ajouter</button></div>
+  <div class="card"><table class="users-table"><thead><tr><th>Nom</th><th>Rôle</th><th>Email</th><th>Actif</th></tr></thead><tbody>${rows}</tbody></table></div>
+  <div class="grid2">
+    <div class="card"><div class="card-h"><span class="card-t">Permissions par rôle</span></div>
+    ${[['Administrateur','#e24b4a',['Dashboard complet','Cartographie','Simulateur','Historique','Gestion utilisateurs','Paramètres']],
+       ['Opérateur','#ef9f27',['Dashboard','Cartographie','Simulateur','Historique']],
+       ['Public','#639922',['Situation générale','Carte des risques (lecture seule)']]].map(([role,c,perms])=>`
+    <div style="margin-bottom:10px">
+      <div style="font-size:10px;font-weight:500;color:${c};margin-bottom:4px">${role}</div>
+      ${perms.map(p=>`<div style="display:flex;align-items:center;gap:6px;font-size:9px;color:#6b6fa8;padding:2px 0"><div style="width:5px;height:5px;border-radius:50%;background:${c};flex-shrink:0"></div>${p}</div>`).join('')}
+    </div>`).join('')}
+    </div>
+    <div class="card"><div class="card-h"><span class="card-t">Restrictions opérateurs</span></div>
+    ${[['Accès simulateur LPG','on'],['Modification seuils','off'],['Export données brutes','on'],['Accès logs système','off']].map(([label,state],i)=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid rgba(255,255,255,0.04)">
+      <span style="font-size:11px;color:#9da2ff">${label}</span>
+      <button class="toggle ${state}" id="rest_${i}" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+    </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function toggleUser(i){
+  USERS_LIST[i].active=!USERS_LIST[i].active;
+  const btn=document.getElementById('tog_'+i);
+  if(btn){btn.classList.toggle('on');btn.classList.toggle('off');}
+}
+
+// ═══════════════════════════════════════════════════════
+//  PAGE PARAMÈTRES
+// ═══════════════════════════════════════════════════════
+function pageParams(){
+  const d=window.INFLUX_DATA||{};
+  return `<div class="page-head"><div><div class="page-title">Paramètres système</div><div class="page-sub">Configuration et conformité · Admin uniquement</div></div></div>
+  <div class="grid2">
+    <div class="card"><div class="card-h"><span class="card-t">Seuils dynamiques IF</span></div>
+    ${[['Seuil CRITIQUE (P5)','-0.099','#e24b4a'],['Seuil SUSPECT (P10)','-0.027','#ef9f27'],['Fenêtre dérive (pts)','15','#7b80ff'],['Rétention données','30 jours','#9da2ff']].map(([k,v,c])=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid rgba(255,255,255,0.04)">
+      <span style="font-size:10px;color:#6b6fa8">${k}</span><span style="font-size:11px;font-weight:500;color:${c}">${v}</span>
+    </div>`).join('')}</div>
+    <div class="card"><div class="card-h"><span class="card-t">Conformité réglementaire</span></div>
+    ${[['CEI 61511 §3.2.71','SIL 1 recall ≥ 90%'],['ISPS §2.1','3 niveaux sécurité'],['ATEX Cat.1','Seuils gaz dangereux'],['ISPS §16.1','Zones accès restreint'],['CEI 61511 §11.2.4','Détection panne capteur']].map(([n,o])=>`
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.04)">
+      <span style="font-size:9px;color:#4c52d4;font-weight:500">${n}</span><span style="font-size:9px;color:#97c459">✓ Conforme</span>
+    </div>`).join('')}</div>
+    <div class="card"><div class="card-h"><span class="card-t">InfluxDB Cloud</span></div>
+    ${[['Bucket','pacte'],['Rétention','30 jours'],['Région','us-east-1 (AWS)'],['Statut',d.connected?'Connecté':'Mode démo']].map(([k,v])=>`
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.04)">
+      <span style="font-size:10px;color:#6b6fa8">${k}</span><span style="font-size:10px;color:#9da2ff">${v}</span>
+    </div>`).join('')}</div>
+    <div class="card"><div class="card-h"><span class="card-t">Architecture PACTE</span></div>
+    ${[['Inférence ML','PC local · FastAPI'],['Protocole','MQTT · ESP32'],['Persistence','InfluxDB Cloud'],['Modèle','Isolation Forest'],['Backend','Flask · Python']].map(([k,v])=>`
+    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.04)">
+      <span style="font-size:10px;color:#6b6fa8">${k}</span><span style="font-size:10px;color:#9da2ff">${v}</span>
+    </div>`).join('')}</div>
+  </div>`;
+}
+</script>
+</body>
+</html>
