@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-3.0+-black?logo=flask)](https://flask.palletsprojects.com)
 [![InfluxDB](https://img.shields.io/badge/InfluxDB-Cloud-orange?logo=influxdb)](https://cloud2.influxdata.com)
-[![IEC 61511](https://img.shields.io/badge/IEC%2061511-SIL%201%20%E2%9C%85-green)]()
+[![Recall](https://img.shields.io/badge/recall%20moyen-96.8%25-green)]()
 [![Recall](https://img.shields.io/badge/Recall%20moyen-96.8%25-brightgreen)]()
 
 ---
@@ -128,9 +128,9 @@ Chaque scénario modifie les valeurs capteurs de manière réaliste pour reprodu
 
 ---
 
-## Performances — Conformité IEC 61511 SIL 1
+## Performances — Objectif inspiré de l'IEC 61511 SIL 1
 
-La norme **IEC 61511 SIL 1** exige un recall ≥ 90% pour les systèmes de sécurité industriels. SENTINEL dépasse ce seuil sur tous les scénarios :
+L'objectif de recall ≥ 90% est inspiré de la norme **IEC 61511 SIL 1** (sécurité industrielle). Le projet n'est pas certifié. SENTINEL dépasse cet objectif sur tous les scénarios :
 
 | Scénario | Recall | Statut |
 |---|---|---|
@@ -139,7 +139,7 @@ La norme **IEC 61511 SIL 1** exige un recall ≥ 90% pour les systèmes de sécu
 | Incendie entrepôt | 97.2% | ✅ |
 | Fuite chimique lente | 95.8% | ✅ |
 | Panne capteur | 91.0% | ✅ |
-| **Moyenne** | **96.8%** | **✅ SIL 1 atteint** |
+| **Moyenne** | **96.8%** | **✅ Objectif atteint** |
 
 ---
 
@@ -222,7 +222,7 @@ sentinel-pacte/
 ├── .env.example                            # Template de configuration
 │
 ├── notebooks/
-│   └── pacte.ipynb                         # Notebook ML — entraînement, injection scénarios, validation SIL 1
+│   └── pacte.ipynb                         # Notebook ML — entraînement, injection scénarios, validation de l'objectif de 90%
 │
 ├── scripts/
 │   ├── query_influxdb.py                   # Requêtes Flux vers InfluxDB
@@ -258,7 +258,7 @@ sentinel-pacte/
 
 | Norme | Niveau | Application |
 |---|---|---|
-| **IEC 61511** | SIL 1 | Seuils P5/P10, recall ≥ 90% validé sur 6 scénarios |
+| **IEC 61511** | SIL 1 (référence, non certifié) | Seuils P5/P10, objectif de recall ≥ 90% validé sur 6 scénarios |
 | **Code ISPS 2003** | Référence | Contexte sécurité portuaire |
 | **Directive ATEX 2014/34/UE** | Référence | Scénarios LPG, fuite chimique, zones explosibles |
 | **UML 2.5** | Conformité | Diagrammes classes, séquences, activités |
